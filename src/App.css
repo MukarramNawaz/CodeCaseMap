@@ -1,0 +1,8 @@
+ul {
+    list-style-type: disc; /* This ensures bullets appear */
+    margin-left: 20px; /* Adds proper spacing */
+  }
+  
+  li {
+    margin-bottom: 5px; /* Adds spacing between items */
+  }

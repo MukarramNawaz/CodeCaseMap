@@ -1,0 +1,109 @@
+{
+  "login": {
+    "welcomeBack": "Bienvenue à nouveau sur CaseMap",
+    "loginMessage": "Connectez-vous pour accéder à votre tableau de bord RH personnalisé et continuer à simplifier vos processus RH.",
+    "loginAccount": "Connectez-vous à votre compte",
+    "businessInsight": "Découvrez ce qui se passe avec votre entreprise",
+    "googleLogin": "Continuer avec Google",
+    "emailPrompt": "Entrez votre adresse email et mot de passe pour vous connecter",
+    "emailAddress": "Adresse Email",
+    "password": "Mot de Passe",
+    "rememberMe": "Se souvenir de moi",
+    "forgotPassword": "Mot de passe oublié ?",
+    "login": "Connexion",
+    "noAccount": "Vous n'avez pas de compte ?",
+    "createAccount": "Créer un compte"
+  },
+  "signup": {
+    "createAccountHeading": "Créez votre compte CaseMap",
+    "description": "Accédez à des solutions RH personnalisées, explorez des études de cas et simplifiez la gestion de vos ressources humaines en quelques minutes.",
+    "createAccount": "Créer un compte",
+    "googleLogin": "Continuer avec Google",
+    "fullName": "Nom complet",
+    "emailAddress": "Adresse Email",
+    "password": "Mot de Passe",
+    "alreadyHaveAccount": "Vous avez déjà un compte ?",
+    "login": "Connexion"
+  },
+  "chat": {
+    "history": "Historique",
+    "today": "Aujourd'hui",
+    "yesterday": "Hier",
+    "previousWeek": "Semaine précédente",
+    "previousMonth": "Mois précédent",
+    "upgradePlan": "Mettre à niveau le plan",
+    "moreAccess": "Accès accru au meilleur modèle",
+    "helpPrompt": "Comment puis-je vous aider ?",
+    "sendMessage": "Envoyer un message",
+    "profile": "Profil",
+    "submitCaseStudy": "Soumettre une étude de cas",
+    "settings": "Paramètres",
+    "help": "Aide",
+    "logout": "Déconnexion",
+    "updateEmployeeDetails": "Mettre à jour les détails de l'employé",
+    "generateVerificationLetter": "Générer une lettre de vérification",
+    "trackEmployeeGoals": "Suivre les objectifs des employés"
+  },
+  "chatinput": {
+    "helpPrompt": "Comment puis-je vous aider ?",
+    "sendMessage": "Envoyer un message"
+  },
+  "settings": {
+    "settings": "Paramètres",
+    "general": "Général",
+    "profile": "Profil",
+    "language": "Langue",
+    "deleteAllChats": "Supprimer toutes les discussions",
+    "deleteAll": "Tout supprimer",
+    "logoutDevice": "Déconnexion sur cet appareil",
+    "logout": "Se déconnecter",
+    "name": "Nom",
+    "oldPassword": "Ancien mot de passe",
+    "newPassword": "Nouveau mot de passe",
+    "saveChanges": "Enregistrer les modifications",
+    "deleteChatsConfirmation": "Êtes-vous sûr de vouloir supprimer toutes les discussions ?",
+    "profileUpdated": "Votre profil a été mis à jour avec succès.",
+    "goToHome": "Aller à l'accueil",
+    "cancel": "Annuler",
+    "yes": "Oui"
+  },
+  "sourceDoc": {
+    "sourceDocuments": "Documents Source",
+    "thankYouMessage": "Merci ! Nous reviendrons vers vous",
+    "learningMorePrompt": "Vous souhaitez en savoir plus ? Cliquez ici pour demander une connexion"
+  },
+  "chatitem": {
+    "rename": "Renommer",
+    "delete": "Supprimer",
+    "deleteChatConfirmation": "Êtes-vous sûr de vouloir supprimer cette discussion ?",
+    "yes": "Oui",
+    "cancel": "Annuler"
+  },
+  "caseStudy": {
+    "mediaUpload": "Téléchargement de médias",
+    "uploadMessage": "Ajoutez vos documents ici, et vous pouvez télécharger jusqu'à ",
+    "dragFiles": "Faites glisser vos fichiers pour commencer à télécharger",
+    "filesMax": "fichiers maximum",
+    "or": "OU",
+    "browseFiles": "Parcourir les fichiers",
+    "supportedFiles": "Soutien uniquement pour les fichiers .PDF et .DOCX",
+    "requestMoreFiles": "+ Demander à ajouter plus de fichiers",
+    "cancel": "Annuler",
+    "submit": "Soumettre"
+  },
+  "upgradePlan": {
+    "upgradePlan": "Mettez à niveau votre plan",
+    "choosePlan": "Choisissez le plan qui vous convient le mieux, n'hésitez pas à nous contacter",
+    "monthly": "Mensuel",
+    "yearly": "Annuel"
+  },
+  "language": {
+    "select": "Seleccionar idioma",
+    "en": "English",
+    "zh": "中文",
+    "es": "Español",
+    "ru": "Русский",
+    "hi": "हिन्दी",
+    "fr": "Français"
+  }
+}
