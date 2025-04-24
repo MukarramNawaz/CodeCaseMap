@@ -61,9 +61,9 @@ function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-black flex">
+    <div className="min-h-screen bg-primary flex">
       {/* Left Column */}
-      <div className="hidden lg:flex lg:w-1/2 bg-black items-center justify-center p-12">
+      <div className="hidden lg:flex lg:w-1/2 bg-primary items-center justify-center p-12">
         <div className="max-w-md text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

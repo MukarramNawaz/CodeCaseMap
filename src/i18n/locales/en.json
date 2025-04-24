@@ -32,7 +32,8 @@
     "previousWeek": "Previous Week",
     "previousMonth": "Previous Month",
     "upgradePlan": "Upgrade Plan",
-    "moreAccess": "More access to the best model",
+    "latestversion": "Want latest version?",
+    "ClickTheButton": "Click the button to upgrade now.",
     "helpPrompt": "What can I help with?",
     "sendMessage": "Send a message",
     "profile": "Profile",
@@ -40,9 +41,12 @@
     "settings": "Settings",
     "help": "Help",
     "logout": "Logout",
-    "updateEmployeeDetails": "Update employee details",
-    "generateVerificationLetter": "Generate verification letter",
-    "trackEmployeeGoals": "Track employee goals"
+    "suggestions": {
+      "divorce": "Divorce",
+      "custody": "Custody",
+      "strategy": "Strategy",
+      "guide": "Guide"
+    }
   },
   "chatinput": {
     "helpPrompt": "What can I help with?",

@@ -23,12 +23,16 @@ function Signup() {
   const [isLoading, setIsLoading] = useState(false);
   const [askOTP, setAskOTP] = useState(false);
   const [otpValues, setOtpValues] = useState(["", "", "", ""]);
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const response = await registerUser(formData.email, formData.password, formData.fullName);
+      const response = await registerUser(
+        formData.email,
+        formData.password,
+        formData.fullName
+      );
       if (response.success) {
         toast.success("Account created successfully!");
         navigate("/chat");
@@ -92,7 +96,7 @@ function Signup() {
   };
 
   return (
-    <div className="min-h-screen bg-black flex">
+    <div className="min-h-screen bg-primary flex">
       {/* Left Column */}
       <div className="hidden lg:flex lg:w-1/2 items-center justify-center p-12">
         <div className="max-w-md text-center">
@@ -207,7 +211,7 @@ function Signup() {
               {!askOTP && (
                 <button
                   type="submit"
-                  className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-black hover:bg-black/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+                  className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
                 >
                   {t("signup.createAccount")}{" "}
                   {isLoading && (
@@ -251,7 +255,7 @@ function Signup() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     onClick={handleOTPVerification}
-                    className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-black hover:bg-black/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+                    className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
                     disabled={isLoading}
                   >
                     {isLoading ? (

@@ -28,10 +28,8 @@ function GeneralSettings() {
       toast.success("All chats deleted successfully");
       setIsDeleteOpen(false);
     } catch (error) {
-        toast.error("Error deleting chats");
-      
+      toast.error("Error deleting chats");
     }
-  
   };
 
   const handleLogout = async () => {
@@ -44,8 +42,6 @@ function GeneralSettings() {
   };
 
   return (
-  
-
     <div className="space-y-6 w-full max-w-lg mx-auto">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <label className="block text-sm font-medium text-gray-700">
@@ -75,7 +71,7 @@ function GeneralSettings() {
         <p>{t("settings.logoutDevice")}</p>
         <button
           onClick={handleLogout}
-          className="px-6 py-2 border border-gray-200 text-black rounded-full hover:ring-primary hover:border-primary whitespace-nowrap"
+          className="px-6 py-2 border border-gray-200 text-primary rounded-full hover:ring-primary hover:border-primary whitespace-nowrap"
         >
           {t("settings.logout")}
         </button>

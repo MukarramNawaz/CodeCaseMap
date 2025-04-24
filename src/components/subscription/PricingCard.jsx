@@ -9,7 +9,7 @@ function PricingCard({ plan, billingCycle, isSelected, onSelect }) {
         isSelected ? "scale-105 shadow-2xl" : "hover:scale-105 hover:shadow-xl"
       } ${
         isSelected
-          ? "bg-black text-white"
+          ? "bg-primary text-white"
           : isPro
           ? "bg-gray-900 text-white"
           : "bg-white"
@@ -64,7 +64,11 @@ function PricingCard({ plan, billingCycle, isSelected, onSelect }) {
         <ul className="space-y-3 sm:space-y-4 mb-8">
           {plan.features.map((feature, index) => (
             <li key={index} className="flex items-start space-x-3">
-              <div className="flex-shrink-0 w-5 h-5 rounded-full bg-black flex items-center justify-center">
+              <div
+                className={`flex-shrink-0 w-5 h-5 rounded-full ${
+                  isSelected ? "bg-gray-800" : "bg-primary"
+                } flex items-center justify-center`}
+              >
                 <CheckIcon className="h-3 w-3 text-white" />
               </div>
               <span className="text-xs sm:text-sm">{feature}</span>
@@ -75,10 +79,10 @@ function PricingCard({ plan, billingCycle, isSelected, onSelect }) {
       <button
         className={`w-full py-2 sm:py-3 rounded-xl font-medium transition-colors duration-200 ${
           isSelected
-            ? "bg-white text-black hover:bg-gray-100"
+            ? "bg-white text-primary hover:bg-gray-100"
             : isPro
-            ? "bg-white text-black hover:bg-gray-100"
-            : "bg-black text-white hover:bg-gray-900"
+            ? "bg-white text-primary hover:bg-gray-100"
+            : "bg-primary text-white hover:bg-gray-900"
         }`}
       >
         {isPro

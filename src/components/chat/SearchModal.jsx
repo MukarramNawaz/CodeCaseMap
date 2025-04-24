@@ -3,7 +3,6 @@ import { Fragment } from "react";
 import { XMarkIcon, ChatBubbleLeftIcon } from "@heroicons/react/24/outline";
 
 function SearchModal({ isOpen, onClose, onSelect, allChats }) {
-
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-50" onClose={onClose}>
@@ -16,7 +15,7 @@ function SearchModal({ isOpen, onClose, onSelect, allChats }) {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-black bg-opacity-25" />
+          <div className="fixed inset-0 bg-primary bg-opacity-25" />
         </Transition.Child>
 
         <div className="fixed inset-0 overflow-y-auto">

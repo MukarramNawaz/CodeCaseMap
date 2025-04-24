@@ -32,7 +32,8 @@
     "previousWeek": "Semaine précédente",
     "previousMonth": "Mois précédent",
     "upgradePlan": "Mettre à niveau le plan",
-    "moreAccess": "Accès accru au meilleur modèle",
+    "latestversion": "Voulez-vous la dernière version ?",
+    "ClickTheButton": "Cliquez sur le bouton pour mettre à niveau maintenant.",
     "helpPrompt": "Comment puis-je vous aider ?",
     "sendMessage": "Envoyer un message",
     "profile": "Profil",
@@ -40,9 +41,12 @@
     "settings": "Paramètres",
     "help": "Aide",
     "logout": "Déconnexion",
-    "updateEmployeeDetails": "Mettre à jour les détails de l'employé",
-    "generateVerificationLetter": "Générer une lettre de vérification",
-    "trackEmployeeGoals": "Suivre les objectifs des employés"
+    "suggestions": {
+      "divorce": "Divorce",
+      "custody": "Garde d'enfant",
+      "strategy": "Stratégie",
+      "guide": "Guide"
+    }
   },
   "chatinput": {
     "helpPrompt": "Comment puis-je vous aider ?",

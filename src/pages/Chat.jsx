@@ -29,7 +29,9 @@ import ChatInput from "../components/chat/ChatInput";
 import SearchModal from "../components/chat/SearchModal";
 import ChatItem from "../components/chat/ChatItem";
 import Logo from "../assets/CaseMap logo.png";
-
+import QuestionMarkIcon from "../assets/question mark.png";
+import BgCircles from "../assets/rounded circles.png";
+import ChatHistory from "../assets/chathistory.png";
 import { UserRoundPen, FilePen, Target } from "lucide-react";
 import NewChatToggle from "../assets/NewChatToggle.svg";
 import SideBarToggle from "../assets/SideBarToggle.svg";
@@ -450,17 +452,22 @@ function Chat() {
   const suggestions = [
     {
       icon: UserRoundPen,
-      label: `${t("chat.updateEmployeeDetails")}`,
+      label: `${t("chat.suggestions.divorce")}`,
       style: "text-blue-400",
     },
     {
       icon: FilePen,
-      label: `${t("chat.generateVerificationLetter")}`,
-      style: "text-black",
+      label: `${t("chat.suggestions.custody")}`,
+      style: "text-primary",
     },
     {
       icon: Target,
-      label: `${t("chat.trackEmployeeGoals")}`,
+      label: `${t("chat.suggestions.strategy")}`,
+      style: "text-red-400",
+    },
+    {
+      icon: Target,
+      label: `${t("chat.suggestions.guide")}`,
       style: "text-red-400",
     },
   ];
@@ -501,7 +508,7 @@ function Chat() {
   //-----------------------------------------------------------------------------
 
   const ShimmerLoader = () => (
-    <div className="flex-1 overflow-y-auto  rounded-lg m-4 bg-gray-50">
+    <div className="flex-1 overflow-y-auto m-4 ">
       <div className="mb-6 animate-pulse space-y-4">
         <div className="h-6 bg-gray-300 rounded w-1/2"></div>
         <div className="space-y-3">
@@ -552,12 +559,12 @@ function Chat() {
             exit={{ x: -sidebarWidth }}
             transition={{ duration: 0.5 }}
             style={{ width: sidebarWidth }}
-            className="bg-white border-r flex flex-col md:relative fixed top-0 left-0 bottom-0 z-20"
+           className="bg-white  flex flex-col md:relative fixed top-0 left-0 bottom-0 z-20"
           >
             <div>
-              <div className="p-4 flex items-center justify-between">
-                <img src={Logo} alt="CaseMap logo " className="w-32" />
-                <div>
+            <div className="p-4 flex items-center justify-center">
+            <img src={Logo} alt="CaseMap logo " className="w-24" />
+                 <div>
                   <button
                     onClick={() => setShowSearchModal(true)}
                     className="relative p-1 hover:bg-gray-100 rounded-lg border border-gray-100 group"
@@ -594,15 +601,20 @@ function Chat() {
                       Hide Side Bar
                     </span>
                   </button>
-                </div>
+                </div> 
               </div>
-              <h1 className="text-3xl font-semibold p-4">
+              <h1 className="text-3xl font-semibold px-4 flex items-center">
                 {" "}
+                <img
+                  className="w-10 ml-2"
+                  src={ChatHistory}
+                  alt="Chat History"
+                />
                 {t("chat.history")}
               </h1>
             </div>
 
-            <div className="flex-1 overflow-y-auto p-4 border border-1 border-gray-150 rounded-lg m-4 bg-gray-50">
+            <div className="flex-1 overflow-y-auto p-4  m-4">
               {fetchingChats ? (
                 <ShimmerLoader />
               ) : (
@@ -626,34 +638,35 @@ function Chat() {
               )}
             </div>
 
-            <div className="p-4">
-              <button
-                onClick={() => setShowSubscriptionModal(true)}
-                className="w-full p-2 bg-white rounded-lg hover:bg-gray-100 border border-gray-150"
-              >
-                <div>
-                  <div className="flex flex-row items-center space-x-2">
-                    <div className="border border-1 border-gray-300 rounded-full p-1">
-                      <BoltIcon className="h-7 w-7 " />
-                    </div>
-                    <div className="text-left">
-                      <h3 className="font-semibold text-left">
-                        {" "}
-                        {t("chat.upgradePlan")}
-                      </h3>
-                      <p className="text-xs text-gray-500 ">
-                        {t("chat.moreAccess")}
-                      </p>
-                    </div>
+            <div className="p-4 relative">
+               <div className="bg-tertiary p-4 h-48 rounded-2xl flex flex-col justify-between relative overflow-hidden">
+                 <div className="absolute top-0 left-10 inset-0 pointer-events-none">
+                   <img src={BgCircles} alt="" className="w-full h-full object-cover" />
+                 </div>
+                 <div className="relative z-10">
+                   <div className="bg-white w-10 h-10 rounded-2xl p-1 flex items-center justify-center">
+                     <img src={QuestionMarkIcon} alt="" className="h-6 w-6" />
                   </div>
                 </div>
-              </button>
+                <div className="relative z-10">
+                   <h2 className="text-lg font-semibold text-white">{t("chat.latestversion")}</h2>
+                   <p className="text-sm text-white">
+                     {t("chat.ClickTheButton")}
+                   </p>
+                 </div>
+                 <button
+                   onClick={() => setShowSubscriptionModal(true)}
+                   className="w-full p-2 bg-white rounded-full hover:bg-gray-100 border border-gray-150 relative z-10"
+                 >
+                   {t("chat.upgradePlan")}
+                 </button>
+               </div>
             </div>
-            <div
+            {/* <div
               className={`resize-handle ${isResizing ? "resizing" : ""}`}
               onMouseDown={startResizing}
               onClick={(e) => e.stopPropagation()}
-            />
+            /> */}
           </motion.div>
         )}
       </AnimatePresence>
@@ -751,7 +764,7 @@ function Chat() {
         </div>
 
         {/* Chat Area with Messages and Input */}
-        <div className="flex-1  overflow-y-auto relative">
+        <div className="flex-1 overflow-y-auto relative bg-gray-50 rounded-tl-3xl rounded-brl-lg">
           {messages.length > 1 && (
             <motion.div
               initial={{ marginLeft: 0 }}

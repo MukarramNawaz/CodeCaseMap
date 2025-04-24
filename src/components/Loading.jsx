@@ -4,7 +4,7 @@ import CaseMapLogo from "../assets/CaseMap logo.png"; // Update the path to your
 
 const Loading = () => {
   return (
-    <div className="flex items-center justify-center h-screen w-screen relative overflow-hidden bg-black">
+    <div className="flex items-center justify-center h-screen w-screen relative overflow-hidden bg-primary">
       {/* Animated background */}
       <motion.div
         className="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900"

@@ -1,7 +1,7 @@
-import { forwardRef, useEffect, useRef } from "react";
+import { forwardRef, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import LOGO from "../../assets/CaseMap logo.png";
-import { Send } from "lucide-react";
+import { Send, AlertTriangle, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 const ChatInput = forwardRef(
   (
@@ -21,6 +21,7 @@ const ChatInput = forwardRef(
   ) => {
     const { t } = useTranslation();
     const textAreaRef = useRef(null);
+    const [showDisclaimer, setShowDisclaimer] = useState(true);
     useEffect(() => {
       if (textAreaRef.current) {
         const textarea = textAreaRef.current;
@@ -94,7 +95,7 @@ const ChatInput = forwardRef(
             <textarea
               ref={textAreaRef}
               rows={1}
-              className="w-full py-5 pl-4 pr-24 rounded-3xl border focus:ring-2 focus:ring-primary focus:border-transparent resize-none bg-white shadow-lg no-scrollbar"
+              className="relative w-full py-5 pl-4 pr-24 rounded-xl border focus:ring-2 focus:ring-primary focus:border-transparent resize-none bg-white shadow-lg no-scrollbar"
               placeholder={t("chatinput.sendMessage")}
               value={message}
               onKeyDown={(e) => {
@@ -114,7 +115,7 @@ const ChatInput = forwardRef(
             />
             <button
               type="submit"
-              className="absolute right-4 bottom-6 text-black "
+              className="absolute right-4 bottom-4 px-6 py-2 rounded-3xl text-white bg-tertiary"
               disabled={!message.trim() || isLoading}
             >
               {/* {isLoading ? "Sending..." : "Send"} */}
@@ -130,7 +131,7 @@ const ChatInput = forwardRef(
                 {suggestions.map((suggestion, index) => (
                   <button
                     key={index}
-                    className="px-5 py-3 bg-white text-black/60 font-medium flex gap-2 text-lg rounded-full shadow-sm hover:shadow-md transition-shadow text-left border border-gray-200"
+                    className="px-5 py-3 bg-white text-primary/60 font-medium flex gap-2 text-lg rounded-full shadow-sm hover:shadow-md transition-shadow text-left border border-gray-200"
                     onClick={() => onSuggestionClick(suggestion)}
                   >
                     <suggestion.icon className={`${suggestion.style}`}/>{suggestion.label}
@@ -143,13 +144,53 @@ const ChatInput = forwardRef(
               {suggestions.map((suggestion, index) => (
                 <button
                   key={index}
-                  className="px-4 py-3 bg-white text-black/60 font-medium flex gap-2 text-sm sm:text-base rounded-full shadow-sm hover:shadow-md transition-shadow text-left border border-gray-200 whitespace-nowrap overflow-hidden text-ellipsis"
+                  className="px-4 py-3 bg-white text-primary/60 font-medium flex gap-2 text-sm sm:text-base rounded-full shadow-sm hover:shadow-md transition-shadow text-left border border-gray-200 whitespace-nowrap overflow-hidden text-ellipsis"
                   onClick={() => onSuggestionClick(suggestion)}
                 >
                   <suggestion.icon className={`${suggestion.style} sm:block`} />
                   <span className="truncate">{suggestion.label}</span>
                 </button>
               ))}
+            </div>
+          )}
+
+          {messagesLength == 0 && showDisclaimer && (
+            <div className="mt-8 p-4 rounded-lg bg-[#DEFFC9] relative">
+              <button
+                onClick={() => setShowDisclaimer(false)}
+                className="absolute top-2 right-2 p-1 hover:bg-gray-200 rounded-full"
+                aria-label="Close disclaimer"
+              >
+                <X size={16} />
+              </button>
+              <div className="flex items-center gap-2 font-bold mb-2">
+                <AlertTriangle size={20} />
+                <h3 className="text-md font-semibold leading-6">
+                  Important Notice
+                </h3>
+              </div>
+              <p className="text-md text-gray-600 font-semibold leading-6">
+                This GPT is designed for informational and educational purposes
+                only and does not constitute legal advice or create an
+                attorney-client relationship. Although it may provide insights
+                based on legal concepts, it is not a substitute for consultation
+                with a qualified attorney licensed to practice in your
+                jurisdiction. By using this GPT, you acknowledge and agree that
+                any actions taken based on its output are your sole
+                responsibility. The developer and owner of this GPT disclaim any
+                liability for outcomes resulting from its use. For legal advice
+                specific to your situation, consult a licensed attorney.
+              </p>
+              <p className="text-md text-gray-600 font-semibold leading-6 mt-2">
+                See our{" "}
+                <a href="#" className="underline">
+                  Privacy Policy
+                </a>{" "}
+                &{" "}
+                <a href="#" className="underline">
+                  Terms of Use
+                </a>
+              </p>
             </div>
           )}
         </div>

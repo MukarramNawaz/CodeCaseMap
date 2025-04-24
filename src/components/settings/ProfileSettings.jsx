@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { EyeIcon, EyeOffIcon, PencilIcon, XIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { useDispatch, useSelector } from 'react-redux';
-import { updateUserInfo } from '../../features/userSlice';
+import { useDispatch, useSelector } from "react-redux";
+import { updateUserInfo } from "../../features/userSlice";
 import { updateUserInfoApi } from "../../services/api";
 import toast from "react-hot-toast";
 
@@ -24,7 +24,7 @@ export default function ProfileSettings({ onClose }) {
   const base64ToFile = async (base64String) => {
     const res = await fetch(base64String);
     const blob = await res.blob();
-    return new File([blob], 'profile-image', { type: blob.type });
+    return new File([blob], "profile-image", { type: blob.type });
   };
 
   const handleUpdateName = (newName) => {
@@ -38,13 +38,13 @@ export default function ProfileSettings({ onClose }) {
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
-      if (!file.type.startsWith('image/')) {
-        toast.error('Please upload an image file');
+      if (!file.type.startsWith("image/")) {
+        toast.error("Please upload an image file");
         return;
       }
-      
+
       if (file.size > 2 * 1024 * 1024) {
-        toast.error('Image size should be less than 2MB');
+        toast.error("Image size should be less than 2MB");
         return;
       }
 
@@ -60,19 +60,29 @@ export default function ProfileSettings({ onClose }) {
   const handleSaveChanges = async () => {
     try {
       // If there's a new image, pass the actual file
-      const imageToUpload = actualImageFile || (profileImage !== userInfo?.profile_picture ? await base64ToFile(profileImage) : null);
-      const response = await updateUserInfoApi(name, userInfo?.email, imageToUpload);
-      
+      const imageToUpload =
+        actualImageFile ||
+        (profileImage !== userInfo?.profile_picture
+          ? await base64ToFile(profileImage)
+          : null);
+      const response = await updateUserInfoApi(
+        name,
+        userInfo?.email,
+        imageToUpload
+      );
+
       if (!response.success) {
         setName(userInfo?.name);
         toast.error(response.message);
         return;
       }
-      
-      dispatch(updateUserInfo({ 
-        name: name,
-        profile_picture: response.data.profile_picture 
-      }));
+
+      dispatch(
+        updateUserInfo({
+          name: name,
+          profile_picture: response.data.profile_picture,
+        })
+      );
       setIsPopUp(true);
     } catch (error) {
       console.error("Error saving changes:", error);
@@ -198,7 +208,7 @@ export default function ProfileSettings({ onClose }) {
         {/* Save Button */}
         <button
           onClick={handleSaveChanges}
-          className=" px-7 bg-black text-white py-2 rounded-full hover:bg-gray-800 transition-colors"
+          className=" px-7 bg-primary text-white py-2 rounded-full hover:bg-gray-800 transition-colors"
         >
           {t("settings.saveChanges")}
         </button>
@@ -221,7 +231,7 @@ export default function ProfileSettings({ onClose }) {
             <div className="mt-6 flex items-center justify-center space-x-4">
               <button
                 onClick={handleGoHome}
-                className="bg-black text-white px-8 py-2 rounded-3xl hover:bg-zinc-700 focus:outline-none"
+                className="bg-primary text-white px-8 py-2 rounded-3xl hover:bg-zinc-700 focus:outline-none"
               >
                 {t("settings.goToHome")}
               </button>

@@ -34,7 +34,7 @@ function SettingsModal({ isOpen, onClose, defaultTab = 0 }) {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-black bg-opacity-25" />
+          <div className="fixed inset-0 bg-primary bg-opacity-25" />
         </TransitionChild>
 
         <div className="fixed inset-0 overflow-y-auto">
@@ -61,7 +61,10 @@ function SettingsModal({ isOpen, onClose, defaultTab = 0 }) {
                   </button>
                 </div>
 
-                <TabGroup className="flex min-h-[500px]" defaultIndex={defaultTab}>
+                <TabGroup
+                  className="flex min-h-[500px]"
+                  defaultIndex={defaultTab}
+                >
                   <TabList className="p-4 border-r border-gray-200">
                     <Tab
                       className={({ selected }) =>
