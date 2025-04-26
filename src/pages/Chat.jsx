@@ -48,6 +48,7 @@ import {
   sendMessageToConversation,
   updateConversationById,
   createConversation,
+  streamAssistant,
 } from "../services/api";
 const API_BASE_URL = import.meta.env.VITE_BASE_URL;
 function Chat() {
@@ -64,7 +65,7 @@ function Chat() {
   const [showSettingsModal, setShowSettingsModal] = useState(false);
   const [showSearchModal, setShowSearchModal] = useState(false);
   const [fetchingChats, setFetchingChats] = useState(true);
-  const [currentChatId, setCurrentChatId] = useState(null);
+  const [currentThreadId, setCurrentThreadId] = useState(null);
   const [allChats, setAllChats] = useState([]);
   const [chatHistory, setChatHistory] = useState({
     today: [],
@@ -180,10 +181,10 @@ function Chat() {
   };
 
   const getChat = async (chat) => {
-    if (currentChatId === chat.id) return;
+    if (currentThreadId === chat.id) return;
     try {
       const data = await getConversationById(chat.id);
-      setCurrentChatId(chat.id);
+      setCurrentThreadId(chat.id);
       setMessages(data.messages);
     } catch (error) {
       console.error("Error fetching chat:", error);
@@ -237,7 +238,7 @@ function Chat() {
   const createNewChat = async () => {
     setMessage("");
     setMessages([]);
-    setCurrentChatId(null);
+    setCurrentThreadId(null);
     // setIsSidebarOpen(false);
   };
 
@@ -247,188 +248,244 @@ function Chat() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  // const handleSendMessage = async (e) => {
+  //   e.preventDefault();
+  //   if (!currentThreadId && message.trim()) {
+  //     setIsLoading(true);
+
+  //     try {
+  //       const { data } = await createConversation(message);
+  //       setChatHistory((prev) => ({
+  //         ...prev,
+  //         today: [data, ...prev.today],
+  //       }));
+
+  //       setCurrentThreadId(data.id);
+
+  //       if (message.trim()) {
+  //         const userMessage = message.trim();
+  //         setMessage("");
+  //         setMessages((prev) => [
+  //           ...prev,
+  //           { content: userMessage, role: "user" },
+  //         ]);
+
+  //         try {
+  //           const response = await sendMessageToConversation(
+  //             currentThreadId,
+  //             message);
+
+  //           const reader = response.body.getReader();
+  //           const decoder = new TextDecoder();
+  //           let assistantMessage = { content: "", role: "assistant" };
+
+  //           while (true) {
+  //             const { done, value } = await reader.read();
+  //             if (done) break;
+
+  //             const chunk = decoder.decode(value, { stream: true });
+  //             const lines = chunk.split("\n");
+
+  //             for (const line of lines) {
+  //               if (line.trim() === "") continue;
+
+  //               const parsedLine = JSON.parse(line);
+  //               if (parsedLine.event === "delta") {
+  //                 assistantMessage.content += parsedLine.data;
+  //                 setMessages((prev) => {
+  //                   const lastMessage = prev[prev.length - 1];
+  //                   if (lastMessage.role === "assistant") {
+  //                     return [
+  //                       ...prev.slice(0, -1),
+  //                       { ...lastMessage, content: assistantMessage.content },
+  //                     ];
+  //                   } else {
+  //                     return [...prev, assistantMessage];
+  //                   }
+  //                 });
+  //               } else if (parsedLine.event === "sources") {
+  //                 // Update the assistant's message with the sources
+  //                 assistantMessage.sources = parsedLine.data;
+  //                 setMessages((prev) => {
+  //                   const lastMessage = prev[prev.length - 1];
+  //                   if (lastMessage.role === "assistant") {
+  //                     return [
+  //                       ...prev.slice(0, -1),
+  //                       { ...lastMessage, sources: assistantMessage.sources },
+  //                     ];
+  //                   } else {
+  //                     return [...prev, assistantMessage];
+  //                   }
+  //                 });
+  //               } else if (parsedLine.event === "done") {
+  //                 // Update the assistant's message with the sources
+  //                 assistantMessage.id = parsedLine.message_id;
+  //                 setMessages((prev) => {
+  //                   const lastMessage = prev[prev.length - 1];
+  //                   if (lastMessage.role === "assistant") {
+  //                     return [
+  //                       ...prev.slice(0, -1),
+  //                       { ...lastMessage, id: assistantMessage.id },
+  //                     ];
+  //                   } else {
+  //                     return [...prev, assistantMessage];
+  //                   }
+  //                 });
+  //               }
+  //             }
+  //           }
+  //         } catch (error) {
+  //           toast.error("Failed to send message");
+  //         } finally {
+  //           setIsLoading(false);
+  //         }
+  //       }
+  //       return;
+  //     } catch (error) {
+  //       toast.error("Failed to send message");
+  //       setIsLoading(false);
+  //       return;
+  //     }
+  //   }
+
+  //   if (message.trim() && !isLoading) {
+  //     const userMessage = message.trim();
+  //     setMessage("");
+  //     setMessages((prev) => [...prev, { content: userMessage, role: "user" }]);
+
+  //     try {
+  //       const response = await fetch(
+  //         `${API_BASE_URL}/user/conversation/${currentThreadId}/message/send`,
+  //         {
+  //           method: "POST",
+  //           headers: {
+  //             Accept: "application/json",
+  //             "Content-Type": "application/json",
+  //           },
+  //           credentials: "include", // Equivalent to `withCredentials: true` in Axios
+  //           body: JSON.stringify({ message, stream: true }),
+  //         }
+  //       );
+
+  //       const reader = response.body.getReader();
+  //       const decoder = new TextDecoder();
+  //       let assistantMessage = { content: "", role: "assistant" };
+
+  //       while (true) {
+  //         const { done, value } = await reader.read();
+  //         if (done) break;
+
+  //         const chunk = decoder.decode(value, { stream: true });
+  //         const lines = chunk.split("\n");
+
+  //         for (const line of lines) {
+  //           if (line.trim() === "") continue;
+
+  //           const parsedLine = JSON.parse(line);
+  //           if (parsedLine.event === "delta") {
+  //             assistantMessage.content += parsedLine.data;
+  //             setMessages((prev) => {
+  //               const lastMessage = prev[prev.length - 1];
+  //               if (lastMessage.role === "assistant") {
+  //                 return [
+  //                   ...prev.slice(0, -1),
+  //                   { ...lastMessage, content: assistantMessage.content },
+  //                 ];
+  //               } else {
+  //                 return [...prev, assistantMessage];
+  //               }
+  //             });
+  //           } else if (parsedLine.event === "sources") {
+  //             // Update the assistant's message with the sources
+  //             assistantMessage.sources = parsedLine.data;
+  //             setMessages((prev) => {
+  //               const lastMessage = prev[prev.length - 1];
+  //               if (lastMessage.role === "assistant") {
+  //                 return [
+  //                   ...prev.slice(0, -1),
+  //                   { ...lastMessage, sources: assistantMessage.sources },
+  //                 ];
+  //               } else {
+  //                 return [...prev, assistantMessage];
+  //               }
+  //             });
+  //           }
+  //         }
+  //       }
+  //     } catch (error) {
+  //       toast.error("Failed to send message");
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   }
+  // };
+
   const handleSendMessage = async (e) => {
     e.preventDefault();
-    if (!currentChatId && message.trim()) {
-      setIsLoading(true);
+    const text = message.trim();
+    if (!text) return;
 
-      try {
-        const { data } = await createConversation(message);
+    setIsLoading(true);
+
+    try {
+      // 1) Create thread if needed
+      let threadId = currentThreadId;
+      if (!threadId) {
+        const {response} = await createConversation(text);
+        threadId = response.data.id;
         setChatHistory((prev) => ({
-          ...prev,
-          today: [data, ...prev.today],
-        }));
-
-        setCurrentChatId(data.id);
-
-        if (message.trim()) {
-          const userMessage = message.trim();
-          setMessage("");
-          setMessages((prev) => [
-            ...prev,
-            { content: userMessage, role: "user" },
-          ]);
-
-          try {
-            const response = await fetch(
-              `${API_BASE_URL}/user/conversation/${data.id}/message/send`,
-              {
-                method: "POST",
-                headers: {
-                  Accept: "application/json",
-                  "Content-Type": "application/json",
-                },
-                credentials: "include", // Equivalent to `withCredentials: true` in Axios
-                body: JSON.stringify({ message, stream: true }),
-              }
-            );
-
-            const reader = response.body.getReader();
-            const decoder = new TextDecoder();
-            let assistantMessage = { content: "", role: "assistant" };
-
-            while (true) {
-              const { done, value } = await reader.read();
-              if (done) break;
-
-              const chunk = decoder.decode(value, { stream: true });
-              const lines = chunk.split("\n");
-
-              for (const line of lines) {
-                if (line.trim() === "") continue;
-
-                const parsedLine = JSON.parse(line);
-                if (parsedLine.event === "delta") {
-                  assistantMessage.content += parsedLine.data;
-                  setMessages((prev) => {
-                    const lastMessage = prev[prev.length - 1];
-                    if (lastMessage.role === "assistant") {
-                      return [
-                        ...prev.slice(0, -1),
-                        { ...lastMessage, content: assistantMessage.content },
-                      ];
-                    } else {
-                      return [...prev, assistantMessage];
-                    }
-                  });
-                } else if (parsedLine.event === "sources") {
-                  // Update the assistant's message with the sources
-                  assistantMessage.sources = parsedLine.data;
-                  setMessages((prev) => {
-                    const lastMessage = prev[prev.length - 1];
-                    if (lastMessage.role === "assistant") {
-                      return [
-                        ...prev.slice(0, -1),
-                        { ...lastMessage, sources: assistantMessage.sources },
-                      ];
-                    } else {
-                      return [...prev, assistantMessage];
-                    }
-                  });
-                } else if (parsedLine.event === "done") {
-                  // Update the assistant's message with the sources
-                  assistantMessage.id = parsedLine.message_id;
-                  setMessages((prev) => {
-                    const lastMessage = prev[prev.length - 1];
-                    if (lastMessage.role === "assistant") {
-                      return [
-                        ...prev.slice(0, -1),
-                        { ...lastMessage, id: assistantMessage.id },
-                      ];
-                    } else {
-                      return [...prev, assistantMessage];
-                    }
-                  });
-                }
-              }
-            }
-          } catch (error) {
-            toast.error("Failed to send message");
-          } finally {
-            setIsLoading(false);
-          }
-        }
-        return;
-      } catch (error) {
-        toast.error("Failed to send message");
-        setIsLoading(false);
-        return;
+                  ...prev,
+                  today: [response.data, ...prev.today],
+                }));
+        setCurrentThreadId(threadId);
       }
-    }
 
-    if (message.trim() && !isLoading) {
-      const userMessage = message.trim();
-      setMessage("");
-      setMessages((prev) => [...prev, { content: userMessage, role: "user" }]);
+      // 2) Append user message locally
+      setMessages((prev) => [...prev, { role: 'user', content: text }]);
+      setMessage('');
 
-      try {
-        const response = await fetch(
-          `${API_BASE_URL}/user/conversation/${currentChatId}/message/send`,
-          {
-            method: "POST",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-            credentials: "include", // Equivalent to `withCredentials: true` in Axios
-            body: JSON.stringify({ message, stream: true }),
-          }
-        );
+      // 3) Persist user message in backend & OpenAI
+      await sendMessageToConversation(threadId, text);
 
-        const reader = response.body.getReader();
-        const decoder = new TextDecoder();
-        let assistantMessage = { content: "", role: "assistant" };
+      // 4) Stream assistant response
+      let buffer = '';
+      // add empty assistant message to start
+      setMessages((prev) => [...prev, { role: 'assistant', content: '' }]);
 
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-
-          const chunk = decoder.decode(value, { stream: true });
-          const lines = chunk.split("\n");
-
-          for (const line of lines) {
-            if (line.trim() === "") continue;
-
-            const parsedLine = JSON.parse(line);
-            if (parsedLine.event === "delta") {
-              assistantMessage.content += parsedLine.data;
-              setMessages((prev) => {
-                const lastMessage = prev[prev.length - 1];
-                if (lastMessage.role === "assistant") {
-                  return [
-                    ...prev.slice(0, -1),
-                    { ...lastMessage, content: assistantMessage.content },
-                  ];
-                } else {
-                  return [...prev, assistantMessage];
-                }
-              });
-            } else if (parsedLine.event === "sources") {
-              // Update the assistant's message with the sources
-              assistantMessage.sources = parsedLine.data;
-              setMessages((prev) => {
-                const lastMessage = prev[prev.length - 1];
-                if (lastMessage.role === "assistant") {
-                  return [
-                    ...prev.slice(0, -1),
-                    { ...lastMessage, sources: assistantMessage.sources },
-                  ];
-                } else {
-                  return [...prev, assistantMessage];
-                }
-              });
-            }
-          }
+      streamAssistant(
+        threadId,
+        (chunk) => {
+          buffer += chunk;
+          setMessages((prev) => {
+            const updated = [...prev];
+            // update last assistant message
+            updated[updated.length - 1].content = buffer;
+            return updated;
+          });
+        },
+        () => setIsLoading(false),
+        (err) => {
+          console.error('Stream error', err);
+          setIsLoading(false);
         }
-      } catch (error) {
-        toast.error("Failed to send message");
-      } finally {
-        setIsLoading(false);
-      }
+      );
+    } catch (err) {
+      console.error(err);
+      setIsLoading(false);
     }
   };
 
   const handleSuggestionClick = (suggestion) => {
+
+    // fetch(`http://localhost:3000/api/createassistant`, {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   credentials: "include",
+    // })
+    
+
     setMessage(suggestion.label);
     inputRef.current?.focus();
   };
@@ -627,7 +684,7 @@ function Chat() {
                       <ChatItem
                         key={chat.id}
                         chat={chat}
-                        currentChatId={currentChatId}
+                        currentThreadId={currentThreadId}
                         onDelete={handleDelete}
                         onRename={handleRename}
                         onChatClick={getChat}
@@ -787,7 +844,7 @@ function Chat() {
                     <ChatMessage
                       key={index}
                       message={msg}
-                      convId={currentChatId}
+                      convId={currentThreadId}
                     />
                   ))}
               </div>

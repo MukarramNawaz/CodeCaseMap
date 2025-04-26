@@ -1,7 +1,7 @@
 // api.js
 import { supabase } from './supabaseClient';
 import store from '../store';
-
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 // Register User
 export const registerUser = async (email, password, name) => {
   try {
@@ -278,53 +278,68 @@ export const updateConversationById = async (id, newName) => {
 };
 
 // Create Conversation
-export const createConversation = async (message) => {
-  try {
-    const response = await axios.post(
-      `${API_BASE_URL}/user/conversation/create`,
-      {
-        message,
-      },
-      {
-        headers: {
-          accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        withCredentials: true,
-      }
-    );
-    return response.data;
-  } catch (error) {
-    throw error.response ? error.response.data : error.message;
+export const createConversation = async (initialMessage) => {
+  const threadName = initialMessage.length > 32 
+    ? `${initialMessage.slice(0, 32)}...` 
+    : initialMessage;
+
+  const response = await fetch(`${API_BASE_URL}/api/createthread`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    credentials: 'include', // This is the fetch equivalent of axios's `withCredentials: true`
+    body: JSON.stringify({ thread_name: threadName })
+  });
+
+  if (!response.ok) {
+    throw new Error(`Error: ${response.status}`);
   }
+
+  const data = await response.json();
+  return data; // Expected to be { id }
 };
 
 // send message to the conversation
-export const sendMessageToConversation = async (id, message, stream = true) => {
-  try {
-    const response = await fetch(
-      `${API_BASE_URL}/user/conversation/${id}/message/send`,
-      {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        credentials: "include", // Equivalent to `withCredentials: true` in Axios
-        body: JSON.stringify({ message, stream }),
-      }
-    );
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw errorData;
+export const sendMessageToConversation = async (threadId, message) => {
+  const resp = await fetch(
+    `${API_BASE_URL}/api/sendmessage`,
+    {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ thread_id: threadId, role: 'user', content: message })
     }
-
-    return await response.json();
-  } catch (error) {
-    throw error.message || "An error occurred";
+  );
+  if (!resp.ok) {
+    const err = await resp.json();
+    throw new Error(err.error || 'Failed to send message');
   }
+  return resp.json(); // { message_id }
 };
+
+// 3) Stream assistant responses via Server-Sent Events
+export const streamAssistant = (threadId, onUpdate, onDone, onError) => {
+  const evtSource = new EventSource(
+    `${API_BASE_URL}/api/stream?thread_id=${threadId}`,
+    { withCredentials: true }
+  );
+  evtSource.onmessage = (e) => {
+    if (e.data === '[DONE]') {
+      evtSource.close();
+      onDone();
+    } else {
+      const { content } = JSON.parse(e.data);
+      onUpdate(content);
+    }
+  };
+  evtSource.onerror = (err) => {
+    evtSource.close();
+    onError(err);
+  };
+  return () => evtSource.close();
+};
+
 
 // Get Plans
 export const getPlans = async () => {
