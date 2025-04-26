@@ -34,6 +34,7 @@ const ChatInput = forwardRef(
         }
       }
     }, [message]);
+    
     return (
       <motion.div
         initial={{ marginLeft: 0 }}
@@ -126,6 +127,12 @@ const ChatInput = forwardRef(
               />
             </button>
           </form>
+           {/* Disclaimer - only shown when user has exactly 1 message */}
+           {messagesLength > 0 && (
+             <div className="text-center text-sm text-gray-600 mt-2">
+              Case Map can make mistakes. See our <a href="/privacy" className="text-tertiary hover:underline">privacy policy</a> & <a href="/terms" className="text-tertiary hover:underline">terms of use</a>
+             </div>
+           )}
           {/* {messagesLength == 0 && (
             <div className=" flex justify-center gap-2">
                 {suggestions.map((suggestion, index) => (

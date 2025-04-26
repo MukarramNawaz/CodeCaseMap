@@ -220,30 +220,30 @@ function SubscriptionModal({ isOpen, onClose }) {
   const { t } = useTranslation();
   const [billingCycle, setBillingCycle] = useState("monthly");
   const [selectedPlan, setSelectedPlan] = useState(null);
-  const [plans, setPlans] = useState({ monthly: [], yearly: [] });
+  const [plans, setPlans] = useState(mockPlans);
   const [useMockData, setUseMockData] = useState(false); // For testing purposes
 
-  useEffect(() => {
-    const fetchPlans = async () => {
-      try {
-        if (useMockData) {
-          setPlans(mockPlans);
-          setSelectedPlan(mockPlans.monthly[0].name);
-          return;
-        }
+  // useEffect(() => {
+  //   const fetchPlans = async () => {
+  //     try {
+  //       if (useMockData) {
+  //         setPlans(mockPlans);
+  //         setSelectedPlan(mockPlans.monthly[0].name);
+  //         return;
+  //       }
 
-        const data = await getPlans();
-        setPlans(data);
-        setSelectedPlan(data.monthly[0].name);
-      } catch (error) {
-        console.error("Failed to fetch plans, using mock data:", error);
-        // Fallback to mock data if API fails
-        setPlans(mockPlans);
-        setSelectedPlan(mockPlans.monthly[0].name);
-      }
-    };
-    fetchPlans();
-  }, [useMockData]);
+  //       const data = await getPlans();
+  //       setPlans(data);
+  //       setSelectedPlan(data.monthly[0].name);
+  //     } catch (error) {
+  //       console.error("Failed to fetch plans, using mock data:", error);
+  //       // Fallback to mock data if API fails
+  //       setPlans(mockPlans);
+  //       setSelectedPlan(mockPlans.monthly[0].name);
+  //     }
+  //   };
+  //   fetchPlans();
+  // }, [useMockData]);
 
   return (
     <Transition appear show={isOpen} as={Fragment}>

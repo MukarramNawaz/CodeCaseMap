@@ -4,6 +4,47 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Typing animation - Modern & Minimalist */
+.typing-animation {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.typing-dot {
+  width: 6px;
+  height: 6px;
+  margin: 0 3px;
+  background-color: #0F3D4A;
+  border-radius: 50%;
+  opacity: 0.5;
+  transform-origin: center;
+  animation: typing-dot-bounce 1.4s infinite cubic-bezier(0.45, 0.05, 0.55, 0.95);
+}
+
+.typing-dot:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.typing-dot:nth-child(2) {
+  animation-delay: 0.25s;
+}
+
+.typing-dot:nth-child(3) {
+  animation-delay: 0.5s;
+}
+
+@keyframes typing-dot-bounce {
+  0%, 100% {
+    transform: translateY(0);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateY(-6px);
+    opacity: 0.8;
+  }
+}
+
 :root {
   font-family: Inter, sans-serif;
 }
