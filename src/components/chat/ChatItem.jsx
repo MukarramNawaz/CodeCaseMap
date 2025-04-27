@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import {
-  EllipsisHorizontalIcon,
+  EllipsisVerticalIcon,
   PencilIcon,
   TrashIcon,
   CheckIcon,
@@ -49,13 +49,13 @@ const ChatItem = ({ chat, onRename, currentChatId, onDelete, onChatClick }) => {
           >
             <MessageCircleMore className="h-5 w-5 " />
             <span>
-              {chat.name.slice(0, 20)} {chat.name.length > 20 && "..."}
+              {chat.name.slice(0, 18)} {chat.name.length > 18 && "..."}
             </span>
           </div>
 
           <Menu as="div" className="relative">
             <MenuButton className="p-1 rounded-lg hover:bg-gray-200">
-              <EllipsisHorizontalIcon className="h-5 w-5 text-gray-500" />
+              <EllipsisVerticalIcon className="h-5 w-5 text-gray-500" />
             </MenuButton>
             <MenuItems className="absolute right-0 mt-1 w-36 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-primary ring-opacity-5 focus:outline-none z-10">
               <MenuItem>

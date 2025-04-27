@@ -9,7 +9,7 @@ function PricingCard({ plan, billingCycle, isSelected, onSelect }) {
         isSelected ? "scale-105 shadow-2xl" : "hover:scale-105 hover:shadow-xl"
       } ${
         isSelected
-          ? "bg-primary text-white"
+          ? "bg-tertiary text-white"
           : isPro
           ? "bg-gray-900 text-white"
           : "bg-white"
@@ -66,7 +66,7 @@ function PricingCard({ plan, billingCycle, isSelected, onSelect }) {
             <li key={index} className="flex items-start space-x-3">
               <div
                 className={`flex-shrink-0 w-5 h-5 rounded-full ${
-                  isSelected ? "bg-gray-800" : "bg-primary"
+                  isSelected ? "bg-gray-800" : "bg-tertiary"
                 } flex items-center justify-center`}
               >
                 <CheckIcon className="h-3 w-3 text-white" />
@@ -79,10 +79,10 @@ function PricingCard({ plan, billingCycle, isSelected, onSelect }) {
       <button
         className={`w-full py-2 sm:py-3 rounded-xl font-medium transition-colors duration-200 ${
           isSelected
-            ? "bg-white text-primary hover:bg-gray-100"
+            ? "bg-white text-tertiary hover:bg-gray-100"
             : isPro
-            ? "bg-white text-primary hover:bg-gray-100"
-            : "bg-primary text-white hover:bg-gray-900"
+            ? "bg-white text-tertiary hover:bg-gray-100"
+            : "bg-tertiary text-white hover:bg-gray-900"
         }`}
       >
         {isPro

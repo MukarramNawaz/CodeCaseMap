@@ -221,7 +221,6 @@ function SubscriptionModal({ isOpen, onClose }) {
   const [billingCycle, setBillingCycle] = useState("monthly");
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [plans, setPlans] = useState(mockPlans);
-  const [useMockData, setUseMockData] = useState(false); // For testing purposes
 
   // useEffect(() => {
   //   const fetchPlans = async () => {
@@ -298,7 +297,7 @@ function SubscriptionModal({ isOpen, onClose }) {
                     <button
                       className={`px-4 sm:px-6 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${
                         billingCycle === "monthly"
-                          ? "bg-primary text-white"
+                          ? "bg-tertiary text-white"
                           : "text-gray-600 hover:bg-gray-50"
                       }`}
                       onClick={() => setBillingCycle("monthly")}
@@ -308,7 +307,7 @@ function SubscriptionModal({ isOpen, onClose }) {
                     <button
                       className={`px-4 sm:px-6 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${
                         billingCycle === "yearly"
-                          ? "bg-primary text-white"
+                          ? "bg-tertiary text-white"
                           : "text-gray-600 hover:bg-gray-50"
                       }`}
                       onClick={() => setBillingCycle("yearly")}
@@ -318,20 +317,7 @@ function SubscriptionModal({ isOpen, onClose }) {
                   </div>
                 </div>
 
-                {/* Toggle mock data (for development/testing) */}
-                {process.env.NODE_ENV === "development" && (
-                  <div className="text-center mb-4">
-                    <label className="inline-flex items-center gap-2 text-sm text-gray-600">
-                      <input
-                        type="checkbox"
-                        checked={useMockData}
-                        onChange={() => setUseMockData(!useMockData)}
-                        className="rounded text-primary focus:ring-primary"
-                      />
-                      Use mock data (for testing)
-                    </label>
-                  </div>
-                )}
+
 
                 <div className="flex flex-col lg:flex-row justify-center items-center lg:items-stretch gap-6">
                   {plans &&

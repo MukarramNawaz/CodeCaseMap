@@ -24,7 +24,7 @@ import toast from "react-hot-toast";
 
 import SubscriptionModal from "../components/subscription/SubscriptionModal";
 
-import SettingsModal from "../components/settings/SettingsModal";
+import AccountSettings from "../components/settings/AccountSettings";
 import ChatInput from "../components/chat/ChatInput";
 import SearchModal from "../components/chat/SearchModal";
 import ChatItem from "../components/chat/ChatItem";
@@ -57,7 +57,7 @@ function Chat() {
   const { t } = useTranslation();
   const { userInfo } = useSelector((state) => state.user);
   const dispatch = useDispatch();
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 768);
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
@@ -296,10 +296,17 @@ function Chat() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // const handleSendMessage = async (e) => {
-  //   e.preventDefault();
-  //   if (!currentThreadId && message.trim()) {
-  //     setIsLoading(true);
+  // Keep sidebar always open on desktop, but allow mobile users to toggle it
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setIsSidebarOpen(true);
+      }
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   //     try {
   //       const { data } = await createConversation(message);
@@ -687,8 +694,8 @@ function Chat() {
                   </span>
                 </button>
                 <button
-                  onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                  className="relative p-1 hover:bg-gray-100 rounded-lg border border-gray-100 group ml-2"
+                  onClick={() => window.innerWidth < 768 && setIsSidebarOpen(!isSidebarOpen)}
+                  className="relative p-1 hover:bg-gray-100 rounded-lg border border-gray-100 group ml-2 md:hidden"
                   aria-label="Hide Side Bar"
                 >
                   <img
@@ -819,8 +826,8 @@ function Chat() {
               </button>
 
               <button
-                onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                className="relative p-1 hover:bg-gray-100 rounded-lg border border-gray-100 group"
+                onClick={() => window.innerWidth < 768 && setIsSidebarOpen(!isSidebarOpen)}
+                className="relative p-1 hover:bg-gray-100 rounded-lg border border-gray-100 group md:hidden"
                 aria-label="Hide Side Bar"
               >
                 <img
@@ -877,50 +884,70 @@ function Chat() {
 
         {/* Chat Area with Messages and Input */}
         <div className="flex-1 overflow-y-auto relative bg-gray-50 rounded-tl-3xl rounded-brl-lg">
-          {messages && messages.length > 0 && (
-            <motion.div
-              initial={{ marginLeft: 0 }}
-              animate={{
-                marginLeft:
-                  isSidebarOpen && window.innerWidth >= 768
-                    ? `${sidebarWidth}px`
-                    : "0px",
-              }}
-              transition={{ duration: 0.5 }}
-              className="pb-1 fixed bottom-32 top-16 right-0 left-0 px-4 max-h-[80vh] overflow-y-auto z-10 flex flex-col-reverse"
-            >
-              {/* Padding to prevent messages being hidden behind input */}
-              <div ref={messagesEndRef} />
-              <div className="flex flex-col-reverse">
-                {messages
-                  .slice()
-                  .reverse()
-                  .map((msg, index) => (
-                    <ChatMessage
-                      key={index}
-                      message={msg}
-                      convId={currentThreadId}
-                      isTyping={msg.isTyping}
-                    />
-                  ))}
-              </div>
-            </motion.div>
-          )}
+          {showSettingsModal ? (
+            <AnimatePresence>
+              <motion.div 
+                className="absolute top-16 bottom-0 left-0 right-0 z-10 bg-gray-50"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+              >
+                <AccountSettings 
+                  onClose={() => {
+                    setShowSettingsModal(false);
+                    setSettingsDefaultTab(0);
+                  }} 
+                />
+              </motion.div>
+            </AnimatePresence>
+          ) : (
+            <>
+              {messages && messages.length > 0 && (
+                <motion.div
+                  initial={{ marginLeft: 0 }}
+                  animate={{
+                    marginLeft:
+                      isSidebarOpen && window.innerWidth >= 768
+                        ? `${sidebarWidth}px`
+                        : "0px",
+                  }}
+                  transition={{ duration: 0.5 }}
+                  className="pb-1 fixed bottom-32 top-16 right-0 left-0 px-4 max-h-[80vh] overflow-y-auto z-10 flex flex-col-reverse"
+                >
+                  {/* Padding to prevent messages being hidden behind input */}
+                  <div ref={messagesEndRef} />
+                  <div className="flex flex-col-reverse">
+                    {messages
+                      .slice()
+                      .reverse()
+                      .map((msg, index) => (
+                        <ChatMessage
+                          key={index}
+                          message={msg}
+                          convId={currentThreadId}
+                          isTyping={msg.isTyping}
+                        />
+                      ))}
+                  </div>
+                </motion.div>
+              )}
 
-          <ChatInput
-            isSidebarOpen={isSidebarOpen}
-            sidebarWidth={sidebarWidth}
-            ref={inputRef}
-            message={message}
-            setMessage={setMessage}
-            messagesLength={messages ? messages.length : 0}
-            setIsInputFocused={setIsInputFocused}
-            onSubmit={handleSendMessage}
-            suggestions={suggestions}
-            onSuggestionClick={handleSuggestionClick}
-            isLoading={isLoading}
-          />
-          
+              <ChatInput
+                isSidebarOpen={isSidebarOpen}
+                sidebarWidth={sidebarWidth}
+                ref={inputRef}
+                message={message}
+                setMessage={setMessage}
+                messagesLength={messages ? messages.length : 0}
+                setIsInputFocused={setIsInputFocused}
+                onSubmit={handleSendMessage}
+                suggestions={suggestions}
+                onSuggestionClick={handleSuggestionClick}
+                isLoading={isLoading}
+              />
+            </>
+          )}
         </div>
       </div>
 
@@ -936,14 +963,7 @@ function Chat() {
         onClose={() => setShowSubscriptionModal(false)}
       />
      
-      <SettingsModal
-        isOpen={showSettingsModal}
-        onClose={() => {
-          setShowSettingsModal(false);
-          setSettingsDefaultTab(0);
-        }}
-        defaultTab={settingsDefaultTab}
-      />
+
 
   
     </div>
