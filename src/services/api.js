@@ -74,6 +74,7 @@ export const getUserInfo = async () => {
             id: user.id,
             name: user.user_metadata?.full_name || user.email,
             profile_picture: user.user_metadata?.avatar_url,
+            email: user.email,
           }])
           .select()
           .single();

@@ -1,7 +1,46 @@
-import { CheckIcon } from "@heroicons/react/24/outline";
+import React, { useEffect, useState } from "react";
+import { CheckIcon } from "@heroicons/react/24/outline"; 
+import { getStripe } from "../../lib/stripe";
+import { supabase } from "../../services/supabaseClient";
+import toast from "react-hot-toast";
+
+async function createCheckoutSession(planId, billingCycle) {
+  try {
+    const { data: { session } } = await supabase.functions.invoke('create-checkout-session', {
+      body: { planId, billingCycle }
+    });
+
+    const stripe = await getStripe();
+    const { error } = await stripe.redirectToCheckout({ sessionId: session.id });
+    
+    if (error) {
+      toast.error(error.message);
+    }
+  } catch (err) {
+    toast.error('Failed to initiate checkout');
+  }
+}
 
 function PricingCard({ plan, billingCycle, isSelected, onSelect }) {
   const isPro = plan.name === "Pro";
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubscribe = async (e) => {
+    e.stopPropagation();
+    setIsLoading(true);
+    console.log('Subscribing with plan ID:', plan.id, 'billing cycle:', billingCycle);
+    await createCheckoutSession(plan.id, billingCycle);
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    console.log('PricingCard rendered with:', {
+      planId: plan.id,
+      planName: plan.name,
+      isSelected,
+      billingCycle
+    });
+  }, [plan, isSelected, billingCycle]);
 
   return (
     <div
@@ -77,6 +116,8 @@ function PricingCard({ plan, billingCycle, isSelected, onSelect }) {
         </ul>
       </div>
       <button
+        onClick={handleSubscribe}
+        disabled={isLoading}
         className={`w-full py-2 sm:py-3 rounded-xl font-medium transition-colors duration-200 ${
           isSelected
             ? "bg-white text-tertiary hover:bg-gray-100"
@@ -89,7 +130,7 @@ function PricingCard({ plan, billingCycle, isSelected, onSelect }) {
           ? "Go to pro"
           : plan.name === "Basic"
           ? "Signup for free"
-          : "Active"}
+          : isLoading ? "Processing..." : "Subscribe"}
       </button>
     </div>
   );
