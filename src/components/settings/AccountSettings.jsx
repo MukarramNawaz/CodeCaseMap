@@ -146,13 +146,18 @@ export default function AccountSettings({
 
                   {/* Profile content section */}
                   <div className="flex flex-col items-center px-4 pb-4 w-full -mt-12">
-                    <div className="relative mb-2">
+                    <div className="relative mb-2 group cursor-pointer" onClick={handleImageClick}>
                       <img
                         src={profileImage || "https://via.placeholder.com/150"}
                         alt="Profile"
-                        className="w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg"
-                        onClick={handleImageClick}
+                        className="w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg group-hover:opacity-90 transition-opacity"
                       />
+                      {/* Edit overlay indicator */}
+                      <div className="absolute inset-0 flex items-center justify-center rounded-full opacity-0 group-hover:opacity-100 transition-opacity bg-black/30">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                        </svg>
+                      </div>
                       {userInfo?.hasActiveSubscription && (
                         <div className="absolute -bottom-1 w-full text-center">
                           <span className="bg-yellow-400 text-white px-2 py-0.5 text-xs rounded-full font-medium">
