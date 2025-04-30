@@ -34,7 +34,11 @@ export const supabase = createBrowserClient(
       storage: {
         getItem: (key) => Promise.resolve(getCookie(key)),
         setItem: (key, value) => {
-          setCookie(key, value, { maxAge: 10 }); // 7 days
+          setCookie(key, value, { 
+            maxAge: 86400, // 24 hours in seconds
+            sameSite: false,
+            httpOnly: false
+          });
           return Promise.resolve();
         },
         removeItem: (key) => {
