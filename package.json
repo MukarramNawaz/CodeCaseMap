@@ -12,14 +12,15 @@
   "dependencies": {
     "@headlessui/react": "^2.2.0",
     "@heroicons/react": "^2.2.0",
-    "@stripe/stripe-js": "^2.4.0",
     "@reduxjs/toolkit": "^2.5.1",
+    "@stripe/stripe-js": "^2.4.0",
+    "@supabase/mcp-server-supabase": "^0.4.0",
     "@supabase/ssr": "^0.6.1",
-    "@supabase/supabase-js": "^2.39.7",
+    "@supabase/supabase-js": "^2.49.4",
     "autoprefixer": "^10.4.18",
     "axios": "^1.8.4",
     "cookie": "^1.0.2",
-    "dotenv": "^16.4.7",
+    "dotenv": "^16.5.0",
     "framer-motion": "^11.0.8",
     "lucide-react": "^0.469.0",
     "postcss": "^8.4.35",
@@ -34,7 +35,8 @@
     "react-router-dom": "^6.22.3",
     "rehype-raw": "^7.0.0",
     "remark-gfm": "^4.0.0",
-    "tailwindcss": "^3.4.1"
+    "tailwindcss": "^3.4.1",
+    "zod-to-json-schema": "^3.24.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.1",

@@ -99,7 +99,17 @@
     "upgradePlan": "Mettez à niveau votre plan",
     "choosePlan": "Choisissez le plan qui vous convient le mieux, n'hésitez pas à nous contacter",
     "monthly": "Mensuel",
-    "yearly": "Annuel"
+    "yearly": "Annuel",
+    "yourSubscription": "Votre Abonnement",
+    "activeSubscription": "Abonnement Actif",
+    "renewsOn": "Se renouvelle le",
+    "currentPlan": "Plan Actuel",
+    "nextBillingDate": "Prochaine date de facturation",
+    "activeUntilCanceled": "Actif jusqu'à annulation",
+    "active": "Actif",
+    "manageBilling": "Gérer la Facturation",
+    "cancelSubscription": "Annuler l'Abonnement",
+    "subscriptionNote": "Votre abonnement vous donne accès aux fonctionnalités premium. Vous pouvez gérer votre abonnement ou l'annuler à tout moment."
   },
   "language": {
     "select": "Seleccionar idioma",

@@ -51,6 +51,37 @@ export const signInWithGoogle = async () => {
   }
 };
 
+// Get User Subscription Status
+export const getUserSubscription = async (userId) => {
+  try {
+    const { data: subscription, error } = await supabase
+      .from('subscriptions')
+      .select('*, plans(*)')
+      .eq('user_id', userId)
+      .eq('status', 'active')
+      .maybeSingle();
+    
+    if (error) throw error;
+    
+    return {
+      success: true,
+      data: subscription,
+      hasActiveSubscription: !!subscription,
+      planDetails: subscription?.plans || null,
+      expiresAt: subscription?.current_period_end || null
+    };
+  } catch (error) {
+    console.error('GetUserSubscription Error:', error);
+    return {
+      success: false,
+      message: error.message,
+      hasActiveSubscription: false,
+      planDetails: null,
+      expiresAt: null
+    };
+  }
+};
+
 // Get User Info
 export const getUserInfo = async () => {
   try {
@@ -86,11 +117,16 @@ export const getUserInfo = async () => {
       }
     }
     
+    // Get subscription data
+    const { data: subscriptionData, hasActiveSubscription } = await getUserSubscription(user.id);
+    
     const combinedData = {
       ...user,
       ...userData,
       name: userData?.name || user.user_metadata?.full_name || user.email,
       profile_picture: userData?.profile_picture || user.user_metadata?.avatar_url,
+      subscription: subscriptionData,
+      hasActiveSubscription
     };
     
     return { success: true, data: combinedData };

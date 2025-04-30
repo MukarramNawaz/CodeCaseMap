@@ -6,10 +6,11 @@ import {
   Transition,
   TransitionChild,
 } from "@headlessui/react";
-import { XMarkIcon } from "@heroicons/react/24/outline";
+import { XMarkIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
 import PricingCard from "./PricingCard";
 import { useTranslation } from "react-i18next";
 import { getPlans } from "../../services/api";
+import { useSelector } from "react-redux";
 
 // Mock data for subscription plans
 const mockPlans = {
@@ -104,6 +105,11 @@ function SubscriptionModal({ isOpen, onClose }) {
   const [billingCycle, setBillingCycle] = useState("monthly");
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [plans, setPlans] = useState(mockPlans);
+  
+  // Get user data from Redux store
+  const { userInfo } = useSelector((state) => state.user);
+  const hasActiveSubscription = userInfo?.hasActiveSubscription || false;
+  const subscriptionData = userInfo?.subscription || null;
 
   // useEffect(() => {
   //   const fetchPlans = async () => {
@@ -173,51 +179,111 @@ function SubscriptionModal({ isOpen, onClose }) {
                       as="h2"
                       className="text-2xl sm:text-3xl font-bold mb-2"
                     >
-                      {t("upgradePlan.upgradePlan")}
+                      {hasActiveSubscription 
+                        ? t("upgradePlan.yourSubscription") 
+                        : t("upgradePlan.upgradePlan")}
                     </DialogTitle>
-                    <p className="text-sm sm:text-base text-gray-500">
-                      {t("upgradePlan.choosePlan")}
+                    {hasActiveSubscription ? (
+                      <div className="flex flex-col items-center space-y-2">
+                        <div className="flex items-center text-tertiary">
+                          <CheckCircleIcon className="h-5 w-5 mr-2" />
+                          <p className="text-sm sm:text-base font-medium">
+                            {t("upgradePlan.activeSubscription")}
+                          </p>
+                        </div>
+                        <p className="text-sm text-gray-500">
+                          {subscriptionData?.planDetails?.name && (
+                            <span className="font-medium">{subscriptionData.planDetails.name} Plan</span>
+                          )}
+                          {subscriptionData?.expiresAt && (
+                            <span> · {t("upgradePlan.renewsOn")} {new Date(subscriptionData.expiresAt).toLocaleDateString()}</span>
+                          )}
+                        </p>
+                      </div>
+                    ) : (
+                      <p className="text-sm sm:text-base text-gray-500">
+                        {t("upgradePlan.choosePlan")}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                {!hasActiveSubscription ? (
+                  <>
+                    <div className="flex justify-center mb-8 sm:mb-12">
+                      <div className="inline-flex p-1 rounded-xl bg-white shadow-sm">
+                        <button
+                          className={`px-4 sm:px-6 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${
+                            billingCycle === "monthly"
+                              ? "bg-tertiary text-white"
+                              : "text-gray-600 hover:bg-gray-50"
+                          }`}
+                          onClick={() => setBillingCycle("monthly")}
+                        >
+                          {t("upgradePlan.monthly")}
+                        </button>
+                        <button
+                          className={`px-4 sm:px-6 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${
+                            billingCycle === "yearly"
+                              ? "bg-tertiary text-white"
+                              : "text-gray-600 hover:bg-gray-50"
+                          }`}
+                          onClick={() => setBillingCycle("yearly")}
+                        >
+                          {t("upgradePlan.yearly")}
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col lg:flex-row justify-center items-center lg:items-stretch gap-6">
+                      {plans &&
+                        plans[billingCycle].map((plan) => (
+                          <PricingCard
+                            key={plan.name}
+                            plan={plan}
+                            billingCycle={billingCycle}
+                            isSelected={selectedPlan === plan.name}
+                            onSelect={() => setSelectedPlan(plan.name)}
+                          />
+                        ))}
+                    </div>
+                  </>
+                ) : (
+                  <div className="flex flex-col items-center justify-center py-8">
+                    <div className="bg-gray-50 rounded-xl p-6 max-w-md w-full mb-6">
+                      <h3 className="text-lg font-medium mb-2">{t("upgradePlan.currentPlan")}</h3>
+                      <div className="flex justify-between items-center mb-4">
+                        <div>
+                          <p className="text-xl font-bold text-tertiary">
+                            {subscriptionData?.planDetails?.name || "Premium"} Plan
+                          </p>
+                          <p className="text-sm text-gray-500">
+                            {subscriptionData?.current_period_end ? (
+                              <span>{t("upgradePlan.nextBillingDate")}: {new Date(subscriptionData.current_period_end).toLocaleDateString()}</span>
+                            ) : (
+                              <span>{t("upgradePlan.activeUntilCanceled")}</span>
+                            )}
+                          </p>
+                        </div>
+                        <div className="bg-tertiary text-white text-xs font-medium px-3 py-1 rounded-full">
+                          {t("upgradePlan.active")}
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <button className="w-full py-2 rounded-xl font-medium bg-white border border-tertiary text-tertiary hover:bg-gray-50 transition-colors duration-200">
+                          {t("upgradePlan.manageBilling")}
+                        </button>
+                        <button className="w-full py-2 rounded-xl font-medium bg-white border border-red-500 text-red-500 hover:bg-red-50 transition-colors duration-200">
+                          {t("upgradePlan.cancelSubscription")}
+                        </button>
+                      </div>
+                    </div>
+                    
+                    <p className="text-sm text-gray-500 max-w-md text-center">
+                      {t("upgradePlan.subscriptionNote")}
                     </p>
                   </div>
-                </div>
-
-                <div className="flex justify-center mb-8 sm:mb-12">
-                  <div className="inline-flex p-1 rounded-xl bg-white shadow-sm">
-                    <button
-                      className={`px-4 sm:px-6 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${
-                        billingCycle === "monthly"
-                          ? "bg-tertiary text-white"
-                          : "text-gray-600 hover:bg-gray-50"
-                      }`}
-                      onClick={() => setBillingCycle("monthly")}
-                    >
-                      {t("upgradePlan.monthly")}
-                    </button>
-                    <button
-                      className={`px-4 sm:px-6 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${
-                        billingCycle === "yearly"
-                          ? "bg-tertiary text-white"
-                          : "text-gray-600 hover:bg-gray-50"
-                      }`}
-                      onClick={() => setBillingCycle("yearly")}
-                    >
-                      {t("upgradePlan.yearly")}
-                    </button>
-                  </div>
-                </div>
-
-                <div className="flex flex-col lg:flex-row justify-center items-center lg:items-stretch gap-6">
-                  {plans &&
-                    plans[billingCycle].map((plan) => (
-                      <PricingCard
-                        key={plan.id}
-                        plan={plan}
-                        billingCycle={billingCycle}
-                        isSelected={selectedPlan === plan.id} // Change to compare ids
-                        onSelect={() => setSelectedPlan(plan.id)}
-                      />
-                    ))}
-                </div>
+                )}
               </DialogPanel>
             </TransitionChild>
           </div>

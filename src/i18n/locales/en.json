@@ -99,7 +99,17 @@
     "upgradePlan": "Upgrade your plan",
     "choosePlan": "Choose plan that works best for you, feel free to contact us",
     "monthly": "Monthly",
-    "yearly": "Yearly"
+    "yearly": "Yearly",
+    "yourSubscription": "Your Subscription",
+    "activeSubscription": "Active Subscription",
+    "renewsOn": "Renews on",
+    "currentPlan": "Current Plan",
+    "nextBillingDate": "Next billing date",
+    "activeUntilCanceled": "Active until canceled",
+    "active": "Active",
+    "manageBilling": "Manage Billing",
+    "cancelSubscription": "Cancel Subscription",
+    "subscriptionNote": "Your subscription gives you access to premium features. You can manage your subscription or cancel it at any time."
   },
   "language": {
     "select": "Select Language",
