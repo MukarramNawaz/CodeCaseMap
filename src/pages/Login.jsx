@@ -62,12 +62,12 @@ function Login() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row">
+    <div className="h-screen flex flex-col lg:flex-row overflow-hidden"> 
       {/* Left Column - Form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-white">
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-white overflow-y-auto"> 
         <div className="max-w-md w-full">
           {/* Language selector positioned at top left */}
-          <div className="fixed top-6 left-6 z-10">
+          {/* <div className="fixed top-6 left-6 z-10">
             <select
               onChange={(e) => changeLanguage(e.target.value)}
               value={i18n.language}
@@ -76,7 +76,7 @@ function Login() {
               <option value="en">{t("language.en")}</option>
               <option value="fr">{t("language.fr")}</option>
             </select>
-          </div>
+          </div> */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -206,17 +206,17 @@ function Login() {
       </div>
 
       {/* Right Column - Background Image */}
-      <div className="hidden lg:block lg:w-1/2 relative overflow-hidden">
+      <div className="hidden lg:block lg:w-1/2 relative"> 
         <motion.div
           initial={{ opacity: 0, x: 100 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.7, ease: "easeOut" }}
-          className="absolute inset-0"
+          className="absolute inset-0" 
         >
           <img
             src={LoginBG}
             alt="Login Background"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover" 
           />
         </motion.div>
       </div>

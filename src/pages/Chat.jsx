@@ -20,6 +20,12 @@ import {
   QuestionMarkCircleIcon,
   BoltIcon,
 } from "@heroicons/react/24/outline";
+import Divorce from "../assets/divorce.png";
+import Custody from "../assets/custody.png";
+import Strategy from "../assets/strategy.png";
+import Guide from "../assets/guide.png";
+import CaseMapLogo from "../assets/CaseMap_logo_small.png";
+import PremiumBadge from "../assets/premium badge.png";
 import toast from "react-hot-toast";
 
 import SubscriptionModal from "../components/subscription/SubscriptionModal";
@@ -32,7 +38,13 @@ import Logo from "../assets/CaseMap logo.png";
 import QuestionMarkIcon from "../assets/question mark.png";
 import BgCircles from "../assets/rounded circles.png";
 import ChatHistory from "../assets/chathistory.png";
-import { UserRoundPen, FilePen, Target, MessageSquarePlus } from "lucide-react";
+import {
+  UserRoundPen,
+  FilePen,
+  Target,
+  MessageSquarePlus,
+  MessageSquareDot,
+} from "lucide-react";
 import { ChatBubbleLeftIcon } from "@heroicons/react/24/solid";
 import SideBarToggle from "../assets/SideBarToggle.svg";
 import { useDispatch, useSelector } from "react-redux";
@@ -569,22 +581,26 @@ function Chat() {
 
   const suggestions = [
     {
-      icon: UserRoundPen,
+      icon: Divorce,
+      iconAlt: "Divorce",
       label: `${t("chat.suggestions.divorce")}`,
       style: "text-blue-400",
     },
     {
-      icon: FilePen,
+      icon: Custody,
+      iconAlt: "Custody",
       label: `${t("chat.suggestions.custody")}`,
       style: "text-primary",
     },
     {
-      icon: Target,
+      icon: Strategy,
+      iconAlt: "Strategy",
       label: `${t("chat.suggestions.strategy")}`,
       style: "text-red-400",
     },
     {
-      icon: Target,
+      icon: Guide,
+      iconAlt: "Guide",
       label: `${t("chat.suggestions.guide")}`,
       style: "text-red-400",
     },
@@ -733,11 +749,12 @@ function Chat() {
 
               {/* Chat History Header */}
               <div className="px-4 flex items-center mt-10">
-                <img
+                {/* <img
                   className="w-6 h-6 mr-2"
                   src={ChatHistory}
                   alt="Chat History"
-                />
+                /> */}
+                <MessageSquareDot className="h-6 w-6 mr-2 text-[#EFAE08]" />
                 <h2 className="text-xl font-medium text-gray-500">
                   {t("chat.history")}
                 </h2>
@@ -829,7 +846,7 @@ function Chat() {
           >
             {/* {!isSidebarOpen && ( */}
             <>
-              <button
+              {/* <button
                 onClick={createNewChat}
                 className="relative p-1 hover:bg-gray-100 rounded-xl border border-gray-100 group ml-6"
                 aria-label="New Chat"
@@ -838,7 +855,7 @@ function Chat() {
                 <span className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-max px-3 py-1 text-xs font-semibold text-white bg-gray-800 rounded-md opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                   New Chat
                 </span>
-              </button>
+              </button> */}
 
               <button
                 onClick={() =>
@@ -852,30 +869,19 @@ function Chat() {
                   alt="Hide Side Bar"
                   className="h-5 w-5 sm:h-6 sm:w-6"
                 />
-                <span className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-max px-3 py-1 text-xs font-semibold text-white bg-gray-800 rounded-md opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                {/* <span className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-max px-3 py-1 text-xs font-semibold text-white bg-gray-800 rounded-md opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                   Show Side Bar
-                </span>
+                </span> */}
               </button>
-              <img
-                src={Logo}
-                alt="Logo"
-                className="pl-2 sm:pl-6 w-28 sm:w-40"
-              />
+              <img src={CaseMapLogo} alt="Logo" className="pl-2" />
             </>
             {/* )} */}
           </motion.div>
 
-          {/* Profile Menu */}
+          {/* Settings Menu */}
           <Menu as="div" className="relative">
-            {" "}
-            <MenuButton className="flex items-center space-x-2 hover:bg-gray-100 rounded-lg p-2">
-              {/* <div className="w-8 h-8 bg-gray-200 rounded-full" /> */}
-              <img
-                src={userInfo.profile_picture}
-                alt="CaseMap User PFP"
-                className="w-8 h-8 rounded-full"
-              />
-              <ChevronUpIcon className="h-4 w-4" />
+            <MenuButton className="flex items-center justify-center bg-gray-200 rounded-full p-2 mr-2">
+              <Cog6ToothIcon className="h-6 w-6 text-tertiary " />
             </MenuButton>
             <MenuItems className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg p-2 z-30">
               {menuItems.map((item, index) => (
@@ -897,6 +903,28 @@ function Chat() {
               ))}
             </MenuItems>
           </Menu>
+
+          {/* Profile Picture (no action) */}
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center justify-center relative">
+              {userInfo?.profile_picture ? (
+                <img
+                  src={userInfo.profile_picture}
+                  alt="User Profile"
+                  className="w-10 h-10 rounded-full border-2 border-gray-200"
+                />
+              ) : (
+                <div className="w-10 h-10 rounded-full border-2 border-gray-200 flex items-center justify-center bg-gray-100">
+                  <UserIcon className="h-6 w-6 text-gray-400" />
+                </div>
+              )}
+              {userInfo?.hasActiveSubscription && (
+                <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-1 shadow-md">
+                  <img src={PremiumBadge} alt="Premium" className="w-3 h-3" />
+                </div>
+              )}
+            </div>
+          </div>
         </div>
 
         {/* Chat Area with Messages and Input */}
@@ -930,7 +958,7 @@ function Chat() {
                         : "0px",
                   }}
                   transition={{ duration: 0.5 }}
-                  className="pb-1 fixed bottom-32 top-16 right-0 left-0 px-4 max-h-[80vh] overflow-y-auto z-10 flex flex-col-reverse"
+                  className="pb-1 fixed bottom-48 top-16 right-0 left-0 px-4 max-h-[80vh] overflow-y-auto z-10 flex flex-col-reverse"
                 >
                   {/* Padding to prevent messages being hidden behind input */}
                   <div ref={messagesEndRef} />

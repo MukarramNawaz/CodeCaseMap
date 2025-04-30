@@ -97,9 +97,9 @@ function Signup() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row">
+    <div className="h-screen flex flex-col lg:flex-row overflow-hidden">
       {/* Left Column - Background Image */}
-      <div className="hidden lg:block lg:w-1/2 relative overflow-hidden">
+      <div className="hidden lg:block lg:w-1/2 relative">
         <motion.div
           initial={{ opacity: 0, x: -100 }}
           animate={{ opacity: 1, x: 0 }}
@@ -115,14 +115,14 @@ function Signup() {
       </div>
 
       {/* Right Column - Form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-white">
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-white overflow-y-auto">
         <div className="max-w-2xl w-full">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
           >
-            <div className="flex justify-self-end sm:fixed top-6 right-6 mb-6">
+            {/* <div className="flex justify-self-end sm:fixed top-6 right-6 mb-6">
               <select
                 onChange={(e) => changeLanguage(e.target.value)}
                 value={i18n.language}
@@ -131,7 +131,7 @@ function Signup() {
                 <option value="en">{t("language.en")}</option>
                 <option value="fr">{t("language.fr")}</option>
               </select>
-            </div>
+            </div> */}
             <img
               src={LogoTransparent}
               alt="Logo"

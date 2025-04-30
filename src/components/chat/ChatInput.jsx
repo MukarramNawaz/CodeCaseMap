@@ -1,7 +1,15 @@
 import { forwardRef, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import LOGO from "../../assets/CaseMap logo.png";
-import { Send, AlertTriangle, X } from "lucide-react";
+import {
+  Send,
+  AlertTriangle,
+  X,
+  ChevronDown,
+  ChevronUp,
+  Sparkles,
+} from "lucide-react";
+import SparklesImg from "../../assets/sparkles.png";
 import { useTranslation } from "react-i18next";
 const ChatInput = forwardRef(
   (
@@ -21,7 +29,47 @@ const ChatInput = forwardRef(
   ) => {
     const { t } = useTranslation();
     const textAreaRef = useRef(null);
+    const starterMenuRef = useRef(null);
     const [showDisclaimer, setShowDisclaimer] = useState(true);
+    const [showStarterMenu, setShowStarterMenu] = useState(false);
+
+    // Predefined starter messages
+    const starterMessages = [
+      "Tell me about divorce proceedings",
+      "How do I file for child custody?",
+      "What are my legal rights in a separation?",
+      "How to prepare for a court hearing?",
+      "What documents do I need for my case?",
+    ];
+
+    // Handle selecting a starter message
+    const handleStarterSelect = (message) => {
+      setMessage(message);
+      setShowStarterMenu(false);
+      textAreaRef.current?.focus();
+    };
+
+    // Handle clicking outside to close dropdown
+    useEffect(() => {
+      const handleClickOutside = (event) => {
+        if (
+          starterMenuRef.current &&
+          !starterMenuRef.current.contains(event.target)
+        ) {
+          setShowStarterMenu(false);
+        }
+      };
+
+      // Add event listener when dropdown is open
+      if (showStarterMenu) {
+        document.addEventListener("mousedown", handleClickOutside);
+      }
+
+      // Cleanup event listener
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, [showStarterMenu]);
     useEffect(() => {
       if (textAreaRef.current) {
         const textarea = textAreaRef.current;
@@ -34,7 +82,7 @@ const ChatInput = forwardRef(
         }
       }
     }, [message]);
-    
+
     return (
       <motion.div
         initial={{ marginLeft: 0 }}
@@ -46,8 +94,8 @@ const ChatInput = forwardRef(
         }}
         transition={{ duration: 0.5 }}
         className={`fixed left-0 right-0 pb-2 transition-transform duration-300 ${
-          messagesLength > 0 ? "bottom-6" : "translate-y-36"
-        }`}
+          messagesLength > 0 ? "bottom-6" : "bottom-6"
+        } z-20`}
       >
         <div className="w-full max-w-5xl mx-auto lg:px-0 px-4">
           {messagesLength == 0 && (
@@ -92,6 +140,54 @@ const ChatInput = forwardRef(
             </button>
           </form> */}
 
+          {/* Starter Button - always visible */}
+          <div className="relative mb-4 flex items-center">
+            <div
+              ref={starterMenuRef}
+              className="relative z-30 flex items-center"
+            >
+              {/* Dropdown container with ref */}
+
+              <img
+                src={SparklesImg}
+                alt="Sparkles"
+                className="h-10 w-10 mr-4"
+              />
+              <button
+                type="button"
+                onClick={() => setShowStarterMenu(!showStarterMenu)}
+                className="flex items-center gap-2 px-6 py-2 bg-white border border-gray-200 rounded-full shadow-md hover:shadow-lg transition-all"
+              >
+                <span className="text-gray-700 font-medium">Starter</span>
+                {/* Display both icons */}
+                <div className="flex items-center">
+                  <ChevronUp className="h-4 w-4 text-gray-500" />
+                  <ChevronDown className="h-4 w-4 text-gray-500" />
+                </div>
+              </button>
+              {/* Starter Menu Dropdown */}
+              {showStarterMenu && (
+                <div className="absolute bottom-full left-0 right-0 transform w-64 mt-2 bg-white rounded-xl shadow-lg border border-gray-200 z-100 overflow-hidden">
+                  {" "}
+                  {/* Increased width and z-index */}
+                  <div className="max-h-60 overflow-y-auto py-2">
+                    {starterMessages.map((msg, index) => (
+                      <button
+                        key={index}
+                        type="button"
+                        className="w-full text-left px-4 py-2 hover:bg-gray-50 text-sm"
+                        onClick={() => handleStarterSelect(msg)}
+                      >
+                        {msg}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Chat Input */}
           <form onSubmit={onSubmit} className="relative mb-4">
             <textarea
               ref={textAreaRef}
@@ -127,12 +223,19 @@ const ChatInput = forwardRef(
               />
             </button>
           </form>
-           {/* Disclaimer - only shown when user has exactly 1 message */}
-           {messagesLength > 0 && (
-             <div className="text-center text-sm text-gray-600 mt-2">
-              Case Map can make mistakes. See our <a href="/privacy" className="text-tertiary hover:underline">privacy policy</a> & <a href="/terms" className="text-tertiary hover:underline">terms of use</a>
-             </div>
-           )}
+          {/* Disclaimer - only shown when user has exactly 1 message */}
+          {messagesLength > 0 && (
+            <div className="text-center text-sm text-gray-600 mt-2">
+              Case Map can make mistakes. See our{" "}
+              <a href="/privacy" className="text-tertiary hover:underline">
+                privacy policy
+              </a>{" "}
+              &{" "}
+              <a href="/terms" className="text-tertiary hover:underline">
+                terms of use
+              </a>
+            </div>
+          )}
           {/* {messagesLength == 0 && (
             <div className=" flex justify-center gap-2">
                 {suggestions.map((suggestion, index) => (
@@ -154,7 +257,11 @@ const ChatInput = forwardRef(
                   className="px-4 py-3 bg-white text-primary/60 font-medium flex gap-2 text-sm sm:text-base rounded-full shadow-sm hover:shadow-md transition-shadow text-left border border-gray-200 whitespace-nowrap overflow-hidden text-ellipsis"
                   onClick={() => onSuggestionClick(suggestion)}
                 >
-                  <suggestion.icon className={`${suggestion.style} sm:block`} />
+                  <img
+                    src={suggestion.icon}
+                    alt={suggestion.iconAlt}
+                    className="w-5 h-5 sm:block"
+                  />
                   <span className="truncate">{suggestion.label}</span>
                 </button>
               ))}
