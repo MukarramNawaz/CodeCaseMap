@@ -879,50 +879,52 @@ function Chat() {
           </motion.div>
 
           {/* Settings Menu */}
-          <Menu as="div" className="relative">
-            <MenuButton className="flex items-center justify-center bg-gray-200 rounded-full p-2 mr-2">
-              <Cog6ToothIcon className="h-6 w-6 text-tertiary " />
-            </MenuButton>
-            <MenuItems className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg p-2 z-30">
-              {menuItems.map((item, index) => (
-                <MenuItem key={index}>
-                  {({ active }) => (
-                    <button
-                      onClick={item.onClick}
-                      className={`${
-                        active ? "bg-gray-100" : ""
-                      } w-full text-left px-4 py-2 rounded-lg flex items-center space-x-2 ${
-                        item.className || ""
-                      }`}
-                    >
-                      <item.icon className="h-5 w-5" />
-                      <span>{item.label}</span>
-                    </button>
-                  )}
-                </MenuItem>
-              ))}
-            </MenuItems>
-          </Menu>
+          <div className="flex items-center">
+            <Menu as="div" className="relative">
+              <MenuButton className="flex items-center justify-center bg-gray-200 rounded-full p-2 mr-2">
+                <Cog6ToothIcon className="h-6 w-6 text-tertiary " />
+              </MenuButton>
+              <MenuItems className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg p-2 z-30">
+                {menuItems.map((item, index) => (
+                  <MenuItem key={index}>
+                    {({ active }) => (
+                      <button
+                        onClick={item.onClick}
+                        className={`${
+                          active ? "bg-gray-100" : ""
+                        } w-full text-left px-4 py-2 rounded-lg flex items-center space-x-2 ${
+                          item.className || ""
+                        }`}
+                      >
+                        <item.icon className="h-5 w-5" />
+                        <span>{item.label}</span>
+                      </button>
+                    )}
+                  </MenuItem>
+                ))}
+              </MenuItems>
+            </Menu>
 
-          {/* Profile Picture (no action) */}
-          <div className="flex items-center space-x-4">
-            <div className="flex items-center justify-center relative">
-              {userInfo?.profile_picture ? (
-                <img
-                  src={userInfo.profile_picture}
-                  alt="User Profile"
-                  className="w-10 h-10 rounded-full border-2 border-gray-200"
-                />
-              ) : (
-                <div className="w-10 h-10 rounded-full border-2 border-gray-200 flex items-center justify-center bg-gray-100">
-                  <UserIcon className="h-6 w-6 text-gray-400" />
-                </div>
-              )}
-              {userInfo?.hasActiveSubscription && (
-                <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-1 shadow-md">
-                  <img src={PremiumBadge} alt="Premium" className="w-3 h-3" />
-                </div>
-              )}
+            {/* Profile Picture (no action) */}
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center justify-center relative">
+                {userInfo?.profile_picture ? (
+                  <img
+                    src={userInfo.profile_picture}
+                    alt="User Profile"
+                    className="w-10 h-10 rounded-full border-2 border-gray-200"
+                  />
+                ) : (
+                  <div className="w-10 h-10 rounded-full border-2 border-gray-200 flex items-center justify-center bg-gray-100">
+                    <UserIcon className="h-6 w-6 text-gray-400" />
+                  </div>
+                )}
+                {userInfo?.hasActiveSubscription && (
+                  <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-1 shadow-md">
+                    <img src={PremiumBadge} alt="Premium" className="w-3 h-3" />
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
