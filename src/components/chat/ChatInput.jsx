@@ -269,7 +269,7 @@ const ChatInput = forwardRef(
           )}
 
           {messagesLength == 0 && showDisclaimer && (
-            <div className="mt-8 p-4 rounded-lg bg-[#DEFFC9] relative">
+            <div className="mt-8 p-4 rounded-lg bg-[#DEFFC9] relative hidden md:block">
               <button
                 onClick={() => setShowDisclaimer(false)}
                 className="absolute top-2 right-2 p-1 hover:bg-gray-200 rounded-full"
