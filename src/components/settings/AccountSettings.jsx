@@ -18,7 +18,7 @@ export default function AccountSettings({ onClose, isSidebarOpen, sidebarWidth }
   const [contactNo, setContactNo] = useState(userInfo?.phone || "");
   const [age, setAge] = useState(userInfo?.age || "");
   const [gender, setGender] = useState(userInfo?.gender || "Male");
-  const [maritalStatus, setMaritalStatus] = useState(userInfo?.maritalStatus || "Single");
+  const [maritalStatus, setMaritalStatus] = useState(userInfo?.marital_status || "Single");
   const [about, setAbout] = useState(userInfo?.about || "");
   
   // Profile image state
@@ -60,7 +60,6 @@ export default function AccountSettings({ onClose, isSidebarOpen, sidebarWidth }
 
   const handleSaveChanges = async () => {
     try {
-      // If there's a new image, pass the actual file
       const imageToUpload =
         actualImageFile ||
         (profileImage !== userInfo?.profile_picture
@@ -71,9 +70,9 @@ export default function AccountSettings({ onClose, isSidebarOpen, sidebarWidth }
         name: fullName,
         email: email,
         phone: contactNo,
-        age: age,
+        age: parseInt(age) || 0,
         gender: gender,
-        maritalStatus: maritalStatus,
+        marital_status: maritalStatus, // Ensure this matches Supabase column name
         about: about
       };
       
@@ -94,9 +93,9 @@ export default function AccountSettings({ onClose, isSidebarOpen, sidebarWidth }
           name: fullName,
           email: email,
           phone: contactNo,
-          age: age,
+          age: parseInt(age) || 0,
           gender: gender,
-          maritalStatus: maritalStatus,
+          marital_status: maritalStatus, // Ensure this matches Supabase column name
           about: about,
           profile_picture: response.data.profile_picture,
         })

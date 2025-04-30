@@ -105,7 +105,7 @@ export const getUserInfo = async () => {
             id: user.id,
             name: user.user_metadata?.full_name || user.email,
             profile_picture: user.user_metadata?.avatar_url,
-            email: user.email,
+            email: user.user_metadata?.email || user.email,
           }])
           .select()
           .single();
@@ -125,6 +125,11 @@ export const getUserInfo = async () => {
       ...userData,
       name: userData?.name || user.user_metadata?.full_name || user.email,
       profile_picture: userData?.profile_picture || user.user_metadata?.avatar_url,
+      phone: userData?.phone || '',
+      age: userData?.age || '',
+      gender: userData?.gender || 'Male',
+      marital_status: userData?.marital_status || 'Single',
+      about: userData?.about || '',
       subscription: subscriptionData,
       hasActiveSubscription
     };
@@ -202,13 +207,19 @@ const uploadAvatar = async (file) => {
   }
 };
 
-// Update User Info
-export const updateUserInfoApi = async (name, email, imageFile) => {
+export const updateUserInfoApi = async (name, email, imageFile, userData) => {
   try {
     const { data: { user }, error: authError } = await supabase.auth.getUser();
     if (authError) throw authError;
 
-    let updateData = { name };
+    let updateData = {
+      name: userData.name,
+      phone: userData.phone,
+      age: userData.age,
+      gender: userData.gender,
+      marital_status: userData.marital_status, // Make sure we use the correct field name
+      about: userData.about
+    };
 
     // Only handle image upload if a new image is provided
     if (imageFile) {
