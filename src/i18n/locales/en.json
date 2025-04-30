@@ -10,9 +10,9 @@
     "password": "Password",
     "rememberMe": "Remember Me",
     "forgotPassword": "Forgot Password?",
-    "login": "Login",
+    "login": "Sign in",
     "noAccount": "Don't have an account?",
-    "createAccount": "Create an account"
+    "createAccount": "Sign Up"
   },
   "signup": {
     "createAccountHeading": "Create Your CaseMap Account",
@@ -22,8 +22,9 @@
     "fullName": "Full Name",
     "emailAddress": "Email Address",
     "password": "Password",
+    "reEnterPassword": "Re-enter Password",
     "alreadyHaveAccount": "Already have an account?",
-    "login": "Login"
+    "login": "Sign in"
   },
   "chat": {
     "history": "Chat History",

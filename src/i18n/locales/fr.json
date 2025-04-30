@@ -22,6 +22,7 @@
     "fullName": "Nom complet",
     "emailAddress": "Adresse Email",
     "password": "Mot de Passe",
+    "reEnterPassword": "Confirmer le mot de passe",
     "alreadyHaveAccount": "Vous avez déjà un compte ?",
     "login": "Connexion"
   },
