@@ -160,7 +160,7 @@ const ChatInput = forwardRef(
               >
                 <span className="text-gray-700 font-medium">Starter</span>
                 {/* Display both icons */}
-                <div className="flex items-center">
+                <div className="flex flex-col items-center">
                   <ChevronUp className="h-4 w-4 text-gray-500" />
                   <ChevronDown className="h-4 w-4 text-gray-500" />
                 </div>
