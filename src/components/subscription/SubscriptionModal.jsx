@@ -9,7 +9,7 @@ import {
 import { XMarkIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
 import PricingCard from "./PricingCard";
 import { useTranslation } from "react-i18next";
-import { getPlans } from "../../services/api";
+
 import { useSelector } from "react-redux";
 
 // Mock data for subscription plans
