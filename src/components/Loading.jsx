@@ -7,7 +7,7 @@ const Loading = () => {
     <div className="flex items-center justify-center h-screen w-screen relative overflow-hidden bg-primary">
       {/* Animated background */}
       <motion.div
-        className="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900"
+        className="absolute inset-0 bg-gradient-to-r from-gray-600 via-gray-400 to-gray-600"
         animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
         transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
         style={{ backgroundSize: "200% 200%" }}
