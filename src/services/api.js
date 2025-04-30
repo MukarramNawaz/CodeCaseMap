@@ -1,6 +1,7 @@
 // api.js
 import { supabase } from './supabaseClient';
 import store from '../store';
+import { getAuthToken } from '../utils/auth';
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 // Register User
 export const registerUser = async (email, password, name) => {
@@ -331,13 +332,17 @@ export const createConversation = async (initialMessage) => {
     ? `${initialMessage.slice(0, 32)}...` 
     : initialMessage;
 
+  const token = getAuthToken();
   const response = await fetch(`${API_BASE_URL}/api/createthread`, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
-    credentials: 'include', // This is the fetch equivalent of axios's `withCredentials: true`
-    body: JSON.stringify({ thread_name: threadName })
+    credentials: 'include',
+    body: JSON.stringify({ 
+      thread_name: threadName,
+      access_token: token 
+    })
   });
 
   if (!response.ok) {
@@ -345,31 +350,38 @@ export const createConversation = async (initialMessage) => {
   }
 
   const data = await response.json();
-  return data; // Expected to be { id }
+  return data;
 };
 
 // send message to the conversation
 export const sendMessageToConversation = async (threadId, message) => {
+  const token = getAuthToken();
   const resp = await fetch(
     `${API_BASE_URL}/api/sendmessage`,
     {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ thread_id: threadId, role: 'user', content: message })
+      body: JSON.stringify({ 
+        thread_id: threadId, 
+        role: 'user', 
+        content: message,
+        access_token: token
+      })
     }
   );
   if (!resp.ok) {
     const err = await resp.json();
     throw new Error(err.error || 'Failed to send message');
   }
-  return resp.json(); // { message_id }
+  return resp.json();
 };
 
 // 3) Stream assistant responses via Server-Sent Events
 export const streamAssistant = (threadId, onUpdate, onDone, onError) => {
+  const token = getAuthToken();
   const evtSource = new EventSource(
-    `${API_BASE_URL}/api/stream?thread_id=${threadId}`,
+    `${API_BASE_URL}/api/stream?thread_id=${threadId}&access_token=${token}`,
     { withCredentials: true }
   );
   evtSource.onmessage = (e) => {
@@ -389,21 +401,3 @@ export const streamAssistant = (threadId, onUpdate, onDone, onError) => {
 };
 
 
-// Get Plans
-export const getPlans = async () => {
-  try {
-    const response = await axios.get(
-      `${API_BASE_URL}/user/subscription/plans?language=en-us`,
-      {
-        headers: {
-          accept: "application/json",
-        },
-        withCredentials: true,
-      }
-    );
-
-    return response.data.data;
-  } catch (error) {
-    throw error.response ? error.response.data : error.message;
-  }
-};
