@@ -136,7 +136,7 @@ function Chat() {
         sortChatsByDate(response.data);
         setAllChats(response.data);
       } else {
-        throw new Error('Failed to fetch chats');
+        throw new Error("Failed to fetch chats");
       }
     } catch (error) {
       console.error("Error fetching chats:", error);
@@ -159,19 +159,19 @@ function Chat() {
       });
       return;
     }
-    
+
     // Get current date at start of day (midnight) for consistent comparison
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    
+
     // Calculate reference dates (all at midnight)
     const yesterday = new Date(today);
     yesterday.setDate(today.getDate() - 1);
-    
+
     // For previous week, we'll consider anything within the last 7 days
     const oneWeekAgo = new Date(today);
     oneWeekAgo.setDate(today.getDate() - 7);
-    
+
     // For previous month, we'll consider anything from 7 days ago to 30 days ago
     const oneMonthAgo = new Date(today);
     oneMonthAgo.setDate(today.getDate() - 30);
@@ -191,7 +191,6 @@ function Chat() {
         chatDateTime.getMonth(),
         chatDateTime.getDate()
       );
-      
 
       // Compare dates
       if (chatDate.getTime() === today.getTime()) {
@@ -209,7 +208,7 @@ function Chat() {
     });
 
     // Sort each category by date (newest first)
-    Object.keys(sortedHistory).forEach(key => {
+    Object.keys(sortedHistory).forEach((key) => {
       sortedHistory[key].sort((a, b) => {
         return new Date(b.created_at) - new Date(a.created_at);
       });
@@ -223,7 +222,7 @@ function Chat() {
     try {
       const response = await getConversationById(chat.id);
       setCurrentThreadId(chat.id);
-      
+
       // Check if the response is successful and has data
       if (response.success && response.data) {
         setMessages(response.data);
@@ -303,9 +302,9 @@ function Chat() {
         setIsSidebarOpen(true);
       }
     };
-    
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   //     try {
@@ -487,26 +486,29 @@ function Chat() {
       // 1) Create thread if needed
       let threadId = currentThreadId;
       if (!threadId) {
-        const {response} = await createConversation(text);
+        const { response } = await createConversation(text);
         threadId = response.data.id;
         setChatHistory((prev) => ({
-                  ...prev,
-                  today: [response.data, ...prev.today],
-                }));
+          ...prev,
+          today: [response.data, ...prev.today],
+        }));
         setCurrentThreadId(threadId);
       }
 
       // 2) Append user message locally
-      setMessages((prev) => [...prev, { role: 'user', content: text }]);
-      setMessage('');
+      setMessages((prev) => [...prev, { role: "user", content: text }]);
+      setMessage("");
 
       // 3) Persist user message in backend & OpenAI
       await sendMessageToConversation(threadId, text);
 
       // 4) Stream assistant response
-      let buffer = '';
+      let buffer = "";
       // add empty assistant message with typing indicator
-      setMessages((prev) => [...prev, { role: 'assistant', content: '', isTyping: true }]);
+      setMessages((prev) => [
+        ...prev,
+        { role: "assistant", content: "", isTyping: true },
+      ]);
 
       streamAssistant(
         threadId,
@@ -525,7 +527,7 @@ function Chat() {
           setIsTyping(false);
         },
         (err) => {
-          console.error('Stream error', err);
+          console.error("Stream error", err);
           setIsLoading(false);
           setIsTyping(false);
         }
@@ -538,7 +540,6 @@ function Chat() {
   };
 
   const handleSuggestionClick = (suggestion) => {
-
     // fetch(`http://localhost:3000/api/createassistant`, {
     //   method: "POST",
     //   headers: {
@@ -546,7 +547,6 @@ function Chat() {
     //   },
     //   credentials: "include",
     // })
-    
 
     setMessage(suggestion.label);
     inputRef.current?.focus();
@@ -564,7 +564,6 @@ function Chat() {
     navigate("/login");
   };
   //-----------------------------------------------------------------------------
- 
 
   //-----------------------------------------------------------------------------
 
@@ -678,63 +677,71 @@ function Chat() {
             exit={{ x: -sidebarWidth }}
             transition={{ duration: 0.5 }}
             style={{ width: sidebarWidth }}
-           className="bg-white  flex flex-col md:relative fixed top-0 left-0 bottom-0 z-20"
+            className="bg-white  flex flex-col md:relative fixed top-0 left-0 bottom-0 z-20"
           >
             <div>
-            <div className="p-4 flex items-center justify-between">
-              <img src={Logo} alt="CaseMap logo" className="w-24" />
-              <div className="flex items-center">
+              <div className="p-4 flex items-center justify-between">
+                <img src={Logo} alt="CaseMap logo" className="w-24" />
+                <div className="flex items-center">
+                  <button
+                    onClick={() => setShowSearchModal(true)}
+                    className="relative p-1 hover:bg-gray-100 rounded-lg border border-gray-100 group"
+                  >
+                    <MagnifyingGlassIcon className="h-5 w-5 sm:h-6 sm:w-6" />
+                    <span className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-max px-3 py-1 text-xs font-semibold text-white bg-gray-800 rounded-md opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                      Search Chat
+                    </span>
+                  </button>
+                  <button
+                    onClick={() =>
+                      window.innerWidth < 768 &&
+                      setIsSidebarOpen(!isSidebarOpen)
+                    }
+                    className="relative p-1 hover:bg-gray-100 rounded-lg border border-gray-100 group ml-2 md:hidden"
+                    aria-label="Hide Side Bar"
+                  >
+                    <img
+                      src={SideBarToggle}
+                      alt="Hide Side Bar"
+                      className="h-5 w-5 sm:h-6 sm:w-6"
+                    />
+                    <span className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-max px-3 py-1 text-xs font-semibold text-white bg-gray-800 rounded-md opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                      Hide Side Bar
+                    </span>
+                  </button>
+                </div>
+              </div>
+
+              {/* New Chat Button - Redesigned to match the image */}
+              <div className="px-4 mb-4">
                 <button
-                  onClick={() => setShowSearchModal(true)}
-                  className="relative p-1 hover:bg-gray-100 rounded-lg border border-gray-100 group"
+                  onClick={createNewChat}
+                  className="w-full flex items-center justify-start gap-2 bg-white rounded-2xl px-5 py-3 hover:bg-gray-50 border border-gray-200 transition-all"
+                  style={{
+                    boxShadow:
+                      "0 -4px 6px -1px rgba(15, 61, 74, 0.15), 0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+                  }}
                 >
-                  <MagnifyingGlassIcon className="h-5 w-5 sm:h-6 sm:w-6" />
-                  <span className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-max px-3 py-1 text-xs font-semibold text-white bg-gray-800 rounded-md opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                    Search Chat
-                  </span>
-                </button>
-                <button
-                  onClick={() => window.innerWidth < 768 && setIsSidebarOpen(!isSidebarOpen)}
-                  className="relative p-1 hover:bg-gray-100 rounded-lg border border-gray-100 group ml-2 md:hidden"
-                  aria-label="Hide Side Bar"
-                >
-                  <img
-                    src={SideBarToggle}
-                    alt="Hide Side Bar"
-                    className="h-5 w-5 sm:h-6 sm:w-6"
-                  />
-                  <span className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-max px-3 py-1 text-xs font-semibold text-white bg-gray-800 rounded-md opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                    Hide Side Bar
+                  <div className="bg-tertiary p-2 rounded-xl">
+                    <ChatBubbleLeftIcon className="h-5 w-5 text-white" />
+                  </div>
+                  <span className="text-xl font-bold text-tertiary">
+                    New Chat
                   </span>
                 </button>
               </div>
-            </div>
-            
-            {/* New Chat Button - Redesigned to match the image */}
-            <div className="px-4 mb-4">
-              <button
-                onClick={createNewChat}
-                className="w-full flex items-center justify-start gap-2 bg-white rounded-2xl px-5 py-3 hover:bg-gray-50 border border-gray-200 transition-all" 
-                style={{ 
-                  boxShadow: '0 -4px 6px -1px rgba(15, 61, 74, 0.15), 0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-                }}
-              >
-                <div className="bg-tertiary p-2 rounded-xl">
-                  <ChatBubbleLeftIcon className="h-5 w-5 text-white" />
-                </div>
-                <span className="text-xl font-bold text-tertiary">New Chat</span>
-              </button>
-            </div>
-            
-            {/* Chat History Header */}
-            <div className="px-4 flex items-center mt-10">
-              <img
-                className="w-6 h-6 mr-2"
-                src={ChatHistory}
-                alt="Chat History"
-              />
-              <h2 className="text-xl font-medium text-gray-500">{t("chat.history")}</h2>
-            </div>
+
+              {/* Chat History Header */}
+              <div className="px-4 flex items-center mt-10">
+                <img
+                  className="w-6 h-6 mr-2"
+                  src={ChatHistory}
+                  alt="Chat History"
+                />
+                <h2 className="text-xl font-medium text-gray-500">
+                  {t("chat.history")}
+                </h2>
+              </div>
             </div>
 
             <div className="flex-1 overflow-y-auto p-4  m-1">
@@ -761,30 +768,38 @@ function Chat() {
               )}
             </div>
 
-            <div className="p-4 relative">
-               <div className="bg-tertiary p-4 h-48 rounded-2xl flex flex-col justify-between relative overflow-hidden">
-                 <div className="absolute top-0 left-10 inset-0 pointer-events-none">
-                   <img src={BgCircles} alt="" className="w-full h-full object-cover" />
-                 </div>
-                 <div className="relative z-10">
-                   <div className="bg-white w-10 h-10 rounded-2xl p-1 flex items-center justify-center">
-                     <img src={QuestionMarkIcon} alt="" className="h-6 w-6" />
+            {!userInfo?.hasActiveSubscription && (
+              <div className="p-4 relative">
+                <div className="bg-tertiary p-4 h-48 rounded-2xl flex flex-col justify-between relative overflow-hidden">
+                  <div className="absolute top-0 left-10 inset-0 pointer-events-none">
+                    <img
+                      src={BgCircles}
+                      alt=""
+                      className="w-full h-full object-cover"
+                    />
                   </div>
+                  <div className="relative z-10">
+                    <div className="bg-white w-10 h-10 rounded-2xl p-1 flex items-center justify-center">
+                      <img src={QuestionMarkIcon} alt="" className="h-6 w-6" />
+                    </div>
+                  </div>
+                  <div className="relative z-10">
+                    <h2 className="text-lg font-semibold text-white">
+                      {t("chat.latestversion")}
+                    </h2>
+                    <p className="text-sm text-white">
+                      {t("chat.ClickTheButton")}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => setShowSubscriptionModal(true)}
+                    className="w-full p-2 bg-white rounded-full hover:bg-gray-100 border border-gray-150 relative z-10"
+                  >
+                    {t("chat.upgradePlan")}
+                  </button>
                 </div>
-                <div className="relative z-10">
-                   <h2 className="text-lg font-semibold text-white">{t("chat.latestversion")}</h2>
-                   <p className="text-sm text-white">
-                     {t("chat.ClickTheButton")}
-                   </p>
-                 </div>
-                 <button
-                   onClick={() => setShowSubscriptionModal(true)}
-                   className="w-full p-2 bg-white rounded-full hover:bg-gray-100 border border-gray-150 relative z-10"
-                 >
-                   {t("chat.upgradePlan")}
-                 </button>
-               </div>
-            </div>
+              </div>
+            )}
             {/* <div
               className={`resize-handle ${isResizing ? "resizing" : ""}`}
               onMouseDown={startResizing}
@@ -826,7 +841,9 @@ function Chat() {
               </button>
 
               <button
-                onClick={() => window.innerWidth < 768 && setIsSidebarOpen(!isSidebarOpen)}
+                onClick={() =>
+                  window.innerWidth < 768 && setIsSidebarOpen(!isSidebarOpen)
+                }
                 className="relative p-1 hover:bg-gray-100 rounded-lg border border-gray-100 group md:hidden"
                 aria-label="Hide Side Bar"
               >
@@ -886,18 +903,18 @@ function Chat() {
         <div className="flex-1 overflow-y-auto relative bg-gray-50 rounded-tl-3xl rounded-brl-lg">
           {showSettingsModal ? (
             <AnimatePresence>
-              <motion.div 
+              <motion.div
                 className="absolute top-16 bottom-0 left-0 right-0 z-10 bg-gray-50"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 20 }}
                 transition={{ duration: 0.3, ease: "easeInOut" }}
               >
-                <AccountSettings 
+                <AccountSettings
                   onClose={() => {
                     setShowSettingsModal(false);
                     setSettingsDefaultTab(0);
-                  }} 
+                  }}
                 />
               </motion.div>
             </AnimatePresence>
@@ -962,10 +979,6 @@ function Chat() {
         isOpen={showSubscriptionModal}
         onClose={() => setShowSubscriptionModal(false)}
       />
-     
-
-
-  
     </div>
   );
 }

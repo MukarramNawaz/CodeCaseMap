@@ -326,6 +326,17 @@ function Signup() {
               </Link>
             </p>
           </motion.div>
+
+          <p className="mt-4 text-center text-sm text-gray-600">
+            By signing in, you agree to our{" "}
+            <a href="" className="text-tertiary hover:text-tertiary/90">
+              privacy policy
+            </a>{" "}
+            and{" "}
+            <a href="" className="text-tertiary hover:text-tertiary/90">
+              terms of service
+            </a>
+          </p>
         </div>
       </div>
     </div>
