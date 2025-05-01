@@ -238,8 +238,8 @@ function SubscriptionModal({ isOpen, onClose }) {
 
                 {!hasActiveSubscription ? (
                   <>
-                    <div className="flex justify-center mb-8 sm:mb-12">
-                      <div className="inline-flex p-1 rounded-xl bg-white shadow-sm">
+                    <div className="flex flex-col items-center mb-8">
+                      <div className="flex items-center bg-gray-100 p-1 rounded-lg mb-3 w-fit">
                         <button
                           className={`px-4 sm:px-6 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center justify-center ${
                             billingCycle === "monthly"
@@ -323,9 +323,19 @@ function SubscriptionModal({ isOpen, onClose }) {
                           {t("upgradePlan.yearly")}
                         </button>
                       </div>
+                      {billingCycle === "yearly" && (
+                        <div>
+                          <span className="bg-amber-100 text-amber-800 text-xs font-medium px-2.5 py-1 rounded-full inline-flex items-center">
+                            <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                              <path fillRule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a1 1 0 011-1h5.586a1 1 0 01.707.293l1 1a1 1 0 001.414 0l1-1A1 1 0 0113.414 4H19a1 1 0 011 1v5c0 .256-.098.512-.293.707z" clipRule="evenodd" />
+                            </svg>
+                            Save 10% with yearly billing
+                          </span>
+                        </div>
+                      )}
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6 w-full">
+                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6 w-full mt-6">
                       {plans &&
                         plans[billingCycle].map((plan) => (
                           <PricingCard

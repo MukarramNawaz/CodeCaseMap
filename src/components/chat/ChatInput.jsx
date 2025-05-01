@@ -1,6 +1,6 @@
 import { forwardRef, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import LOGO from "../../assets/CaseMap logo.png";
+import LOGO from "../../assets/logo_single.png";
 import {
   Send,
   AlertTriangle,
@@ -104,11 +104,15 @@ const ChatInput = forwardRef(
               animate={{ opacity: 1, y: 0 }}
               className="text-center mb-8"
             >
-              <img
-                src={LOGO}
-                alt="Robot"
-                className="w-24 mx-auto rounded-full mb-8"
-              />
+              <div
+                className="bg-white shadow-xl p-5 mx-auto rounded-full mb-8 w-24 h-24 flex items-center justify-center"
+                style={{
+                  boxShadow:
+                    "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)",
+                }}
+              >
+                <img src={LOGO} alt="Robot" className="object-contain" />
+              </div>
               <h1 className="text-4xl font-bold mb-8">
                 {t("chatinput.helpPrompt")}
               </h1>

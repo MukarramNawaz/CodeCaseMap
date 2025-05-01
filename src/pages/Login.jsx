@@ -172,9 +172,9 @@ function Login() {
                     </label>
                   </div>
 
-                  <a className="text-sm font-medium text-tertiary hover:underline">
+                  <Link to="/forgot-password" className="text-sm font-medium text-tertiary hover:underline">
                     {t("login.forgotPassword")}
-                  </a>
+                  </Link>
                 </div>
 
                 <button

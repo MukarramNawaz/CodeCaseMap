@@ -8,7 +8,7 @@ import {
 } from "@heroicons/react/24/solid";
 import { MessageCircleMore, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
-const ChatItem = ({ chat, onRename, currentChatId, onDelete, onChatClick }) => {
+const ChatItem = ({ chat, onRename, currentThreadId, onDelete, onChatClick }) => {
   const { t } = useTranslation();
   const [isEditing, setIsEditing] = useState(false);
   const [newName, setNewName] = useState(chat.name);
@@ -37,18 +37,20 @@ const ChatItem = ({ chat, onRename, currentChatId, onDelete, onChatClick }) => {
   };
   return (
     <div
-      className={`py-2 px-3  rounded-lg relative group ${
-        currentChatId === chat.id ? "bg-gray-300" : " hover:bg-gray-100"
+      className={`py-2 px-3 rounded-lg relative group transition-all duration-200 ${
+        currentThreadId === chat.id 
+          ? "bg-tertiary bg-opacity-10 border-l-4 border-tertiary shadow-sm" 
+          : "hover:bg-gray-100 border-l-4 border-transparent"
       }`}
     >
       {!isEditing ? (
         <div className="flex justify-between items-center">
           <div
-            className="flex gap-1 items-center cursor-pointer w-full"
+            className="flex gap-2 items-center cursor-pointer w-full"
             onClick={() => onChatClick(chat)}
           >
-            <MessageCircleMore className="h-5 w-5 " />
-            <span>
+            <MessageCircleMore className={`h-5 w-5 ${currentThreadId === chat.id ? "text-tertiary" : ""}`} />
+            <span className={`${currentThreadId === chat.id ? "font-medium text-tertiary" : ""}`}>
               {chat.name.slice(0, 18)} {chat.name.length > 18 && "..."}
             </span>
           </div>

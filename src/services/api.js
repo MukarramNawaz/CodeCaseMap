@@ -52,6 +52,34 @@ export const signInWithGoogle = async () => {
   }
 };
 
+// Request Password Reset
+export const requestPasswordReset = async (email) => {
+  try {
+    const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/reset-password`,
+    });
+
+    if (error) throw error;
+    return { success: true, data };
+  } catch (error) {
+    return { success: false, message: error.message };
+  }
+};
+
+// Reset Password with New Password
+export const resetPassword = async (newPassword) => {
+  try {
+    const { data, error } = await supabase.auth.updateUser({
+      password: newPassword
+    });
+
+    if (error) throw error;
+    return { success: true, data };
+  } catch (error) {
+    return { success: false, message: error.message };
+  }
+};
+
 // Get User Subscription Status
 export const getUserSubscription = async (userId) => {
   try {
