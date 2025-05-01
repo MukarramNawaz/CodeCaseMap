@@ -106,7 +106,7 @@ function SubscriptionModal({ isOpen, onClose }) {
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [plans, setPlans] = useState(mockPlans);
   const [isLoading, setIsLoading] = useState(false);
-  
+
   // Get user data from Redux store
   const { userInfo } = useSelector((state) => state.user);
   const hasActiveSubscription = userInfo?.hasActiveSubscription || false;
@@ -180,8 +180,8 @@ function SubscriptionModal({ isOpen, onClose }) {
                       as="h2"
                       className="text-2xl sm:text-3xl font-bold mb-2"
                     >
-                      {hasActiveSubscription 
-                        ? t("upgradePlan.yourSubscription") 
+                      {hasActiveSubscription
+                        ? t("upgradePlan.yourSubscription")
                         : t("upgradePlan.upgradePlan")}
                     </DialogTitle>
                     {hasActiveSubscription ? (
@@ -194,10 +194,18 @@ function SubscriptionModal({ isOpen, onClose }) {
                         </div>
                         <p className="text-sm text-gray-500">
                           {subscriptionData?.planDetails?.name && (
-                            <span className="font-medium">{subscriptionData.planDetails.name} Plan</span>
+                            <span className="font-medium">
+                              {subscriptionData.planDetails.name} Plan
+                            </span>
                           )}
                           {subscriptionData?.expiresAt && (
-                            <span> · {t("upgradePlan.renewsOn")} {new Date(subscriptionData.expiresAt).toLocaleDateString()}</span>
+                            <span>
+                              {" "}
+                              · {t("upgradePlan.renewsOn")}{" "}
+                              {new Date(
+                                subscriptionData.expiresAt
+                              ).toLocaleDateString()}
+                            </span>
                           )}
                         </p>
                       </div>
@@ -231,9 +239,25 @@ function SubscriptionModal({ isOpen, onClose }) {
                           disabled={isLoading}
                         >
                           {isLoading && billingCycle !== "monthly" ? (
-                            <svg className="animate-spin h-4 w-4 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            <svg
+                              className="animate-spin h-4 w-4 mr-2"
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                            >
+                              <circle
+                                className="opacity-25"
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="currentColor"
+                                strokeWidth="4"
+                              ></circle>
+                              <path
+                                className="opacity-75"
+                                fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                              ></path>
                             </svg>
                           ) : null}
                           {t("upgradePlan.monthly")}
@@ -256,9 +280,25 @@ function SubscriptionModal({ isOpen, onClose }) {
                           disabled={isLoading}
                         >
                           {isLoading && billingCycle !== "yearly" ? (
-                            <svg className="animate-spin h-4 w-4 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            <svg
+                              className="animate-spin h-4 w-4 mr-2"
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                            >
+                              <circle
+                                className="opacity-25"
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="currentColor"
+                                strokeWidth="4"
+                              ></circle>
+                              <path
+                                className="opacity-75"
+                                fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                              ></path>
                             </svg>
                           ) : null}
                           {t("upgradePlan.yearly")}
@@ -282,17 +322,27 @@ function SubscriptionModal({ isOpen, onClose }) {
                 ) : (
                   <div className="flex flex-col items-center justify-center py-8">
                     <div className="bg-gray-50 rounded-xl p-6 max-w-md w-full mb-6">
-                      <h3 className="text-lg font-medium mb-2">{t("upgradePlan.currentPlan")}</h3>
+                      <h3 className="text-lg font-medium mb-2">
+                        {t("upgradePlan.currentPlan")}
+                      </h3>
                       <div className="flex justify-between items-center mb-4">
                         <div>
                           <p className="text-xl font-bold text-tertiary">
-                            {subscriptionData?.planDetails?.name || "Premium"} Plan
+                            {subscriptionData?.planDetails?.name || "Premium"}{" "}
+                            Plan
                           </p>
                           <p className="text-sm text-gray-500">
                             {subscriptionData?.current_period_end ? (
-                              <span>{t("upgradePlan.nextBillingDate")}: {new Date(subscriptionData.current_period_end).toLocaleDateString()}</span>
+                              <span>
+                                {t("upgradePlan.nextBillingDate")}:{" "}
+                                {new Date(
+                                  subscriptionData.current_period_end
+                                ).toLocaleDateString()}
+                              </span>
                             ) : (
-                              <span>{t("upgradePlan.activeUntilCanceled")}</span>
+                              <span>
+                                {t("upgradePlan.activeUntilCanceled")}
+                              </span>
                             )}
                           </p>
                         </div>
@@ -309,7 +359,7 @@ function SubscriptionModal({ isOpen, onClose }) {
                         </button>
                       </div>
                     </div>
-                    
+
                     <p className="text-sm text-gray-500 max-w-md text-center">
                       {t("upgradePlan.subscriptionNote")}
                     </p>

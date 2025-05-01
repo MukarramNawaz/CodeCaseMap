@@ -62,10 +62,10 @@ function Login() {
   };
 
   return (
-    <div className="h-screen flex flex-col lg:flex-row overflow-hidden"> 
+    <div className="h-screen flex flex-col lg:flex-row overflow-hidden">
       {/* Left Column - Form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-white overflow-y-auto"> 
-        <div className="max-w-md w-full">
+      <div className="w-full lg:w-1/2 flex items-center justify-center h-full bg-white overflow-hidden">
+        <div className="max-w-md w-full mx-auto px-4 py-6">
           {/* Language selector positioned at top left */}
           {/* <div className="fixed top-6 left-6 z-10">
             <select
@@ -82,18 +82,27 @@ function Login() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <img src={Logo} alt="CaseMap logo" className="h-40 mx-auto mb-6" />
+            <img
+              src={Logo}
+              alt="CaseMap logo"
+              className="h-16 sm:h-20 md:h-24 mx-auto mb-2 sm:mb-4"
+            />
 
-            <div className="bg-white p-6 rounded-lg shadow-lg">
-              <h2 className="text-3xl font-bold mb-4 text-center">
-                {t("login.loginAccount")}
+            <div className="bg-white p-4 sm:p-5 md:p-6 rounded-lg shadow-lg">
+              <h2 className="text-xl sm:text-2xl md:text-3xl text-tertiary font-bold mb-2 sm:mb-4 text-center">
+                {t("login.welcomeBack")}
               </h2>
-              <p className="mb-4 text-center">{t("login.businessInsight")}</p>
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <p className="mb-2 sm:mb-4 text-center text-sm">
+                {t("login.businessInsight")}
+              </p>
+              <form
+                onSubmit={handleSubmit}
+                className="space-y-1.5 sm:space-y-2 md:space-y-3"
+              >
                 <button
                   type="button"
                   onClick={handleGoogleSignIn}
-                  className="w-full flex items-center justify-center gap-2 py-2 px-4 my-8 border border-gray-300 rounded-xl shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tertiary"
+                  className="w-full flex items-center justify-center gap-2 py-2 px-4 my-4 sm:my-6 border border-gray-300 rounded-xl shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tertiary"
                 >
                   <img
                     src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
@@ -118,25 +127,25 @@ function Login() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-xs sm:text-sm font-medium text-gray-700">
                     {t("login.emailAddress")}
                   </label>
                   <input
                     type="email"
                     required
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-tertiary focus:border-tertiary"
+                    className="mt-1 block w-full px-3 py-1.5 sm:py-2 text-sm border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-tertiary focus:border-tertiary"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-xs sm:text-sm font-medium text-gray-700">
                     {t("login.password")}
                   </label>
                   <input
                     type="password"
                     required
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-tertiary focus:border-tertiary"
+                    className="mt-1 block w-full px-3 py-1.5 sm:py-2 text-sm border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-tertiary focus:border-tertiary"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
@@ -170,7 +179,7 @@ function Login() {
 
                 <button
                   type="submit"
-                  className="w-full flex justify-center items-center py-2 px-4 border border-transparent rounded-xl shadow-sm text-lg font-medium text-white bg-tertiary hover:bg-tertiary/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tertiary"
+                  className="w-full flex justify-center items-center py-1.5 sm:py-2 px-4 border border-transparent rounded-xl shadow-sm text-base sm:text-lg font-medium text-white bg-tertiary hover:bg-tertiary/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tertiary"
                 >
                   {t("login.login")}{" "}
                   {isLoading ? (
@@ -180,7 +189,7 @@ function Login() {
                   )}
                 </button>
               </form>
-              <p className="mt-4 text-center text-sm text-gray-600">
+              <p className="mt-2 text-center text-xs sm:text-sm text-gray-600">
                 {t("login.noAccount")}{" "}
                 <Link
                   to="/signup"
@@ -191,7 +200,7 @@ function Login() {
               </p>
             </div>
 
-            <p className="mt-4 text-center text-sm text-gray-600">
+            <p className="mt-2 text-center text-xs sm:text-sm text-gray-600">
               By signing in, you agree to our{" "}
               <a href="" className="text-tertiary hover:text-tertiary/90">
                 privacy policy
@@ -206,17 +215,17 @@ function Login() {
       </div>
 
       {/* Right Column - Background Image */}
-      <div className="hidden lg:block lg:w-1/2 relative"> 
+      <div className="hidden lg:block lg:w-1/2 relative">
         <motion.div
           initial={{ opacity: 0, x: 100 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.7, ease: "easeOut" }}
-          className="absolute inset-0" 
+          className="absolute inset-0"
         >
           <img
             src={LoginBG}
             alt="Login Background"
-            className="w-full h-full object-cover" 
+            className="w-full h-full object-cover"
           />
         </motion.div>
       </div>

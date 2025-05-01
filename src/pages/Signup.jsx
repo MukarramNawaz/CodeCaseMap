@@ -115,8 +115,8 @@ function Signup() {
       </div>
 
       {/* Right Column - Form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 bg-white overflow-y-auto">
-        <div className="max-w-2xl w-full">
+      <div className="w-full lg:w-1/2 flex items-center justify-center h-full bg-white overflow-hidden">
+        <div className="max-w-md w-full sm:max-w-lg md:max-w-2xl mx-auto px-4 py-6">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -135,17 +135,17 @@ function Signup() {
             <img
               src={LogoTransparent}
               alt="Logo"
-              className="h-40 mx-auto mb-6"
+              className="h-16 sm:h-20 md:h-24 mx-auto mb-2 sm:mb-4"
             />
-            <div className="bg-white p-6 rounded-lg shadow-lg">
-              <h2 className="text-3xl text-tertiary font-bold mb-8 text-center">
+            <div className="bg-white p-4 sm:p-5 md:p-6 rounded-lg shadow-lg">
+              <h2 className="text-xl sm:text-2xl md:text-3xl text-tertiary font-bold mb-2 sm:mb-4 text-center">
                 {t("signup.createAccount")}
               </h2>
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-1.5 sm:space-y-2 md:space-y-3">
                 <button
                   type="button"
                   onClick={handleGoogleSignUp}
-                  className="w-full flex items-center justify-center gap-2 py-2 px-4 border border-gray-300 rounded-xl shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tertiary"
+                  className="w-full flex items-center justify-center gap-2 py-2 px-4 border border-gray-300 rounded-xl shadow-sm text-xs sm:text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tertiary"
                 >
                   <img
                     src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
@@ -169,13 +169,13 @@ function Signup() {
 
                 {/* Full-width Name Input */}
                 <div className="w-full">
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-xs sm:text-sm font-medium text-gray-700">
                     {t("signup.fullName")}
                   </label>
                   <input
                     type="text"
                     required
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-tertiary focus:border-tertiary"
+                    className="mt-1 block w-full px-3 py-1.5 sm:py-2 text-sm border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-tertiary focus:border-tertiary"
                     value={formData.fullName}
                     onChange={(e) =>
                       setFormData({ ...formData, fullName: e.target.value })
@@ -185,13 +185,13 @@ function Signup() {
 
                 {/* Full-width Email Input */}
                 <div className="w-full">
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-xs sm:text-sm font-medium text-gray-700">
                     {t("signup.emailAddress")}
                   </label>
                   <input
                     type="email"
                     required
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-tertiary focus:border-tertiary"
+                    className="mt-1 block w-full px-3 py-1.5 sm:py-2 text-sm border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-tertiary focus:border-tertiary"
                     value={formData.email}
                     onChange={(e) =>
                       setFormData({ ...formData, email: e.target.value })
@@ -200,15 +200,15 @@ function Signup() {
                 </div>
 
                 {/* Two-column Password Fields */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2 sm:gap-3">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">
+                    <label className="block text-xs sm:text-sm font-medium text-gray-700">
                       {t("signup.password")}
                     </label>
                     <input
                       type="password"
                       required
-                      className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-tertiary focus:border-tertiary"
+                      className="mt-1 block w-full px-3 py-1.5 sm:py-2 text-sm border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-tertiary focus:border-tertiary"
                       value={formData.password}
                       onChange={(e) =>
                         setFormData({ ...formData, password: e.target.value })
@@ -216,13 +216,13 @@ function Signup() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">
+                    <label className="block text-xs sm:text-sm font-medium text-gray-700">
                       {t("signup.reEnterPassword") || "Re-enter Password"}
                     </label>
                     <input
                       type="password"
                       required
-                      className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-tertiary focus:border-tertiary"
+                      className="mt-1 block w-full px-3 py-1.5 sm:py-2 text-sm border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-tertiary focus:border-tertiary"
                       onChange={(e) => {
                         // You can add password confirmation validation here
                         if (e.target.value !== formData.password) {
@@ -259,7 +259,7 @@ function Signup() {
                 {!askOTP && (
                   <button
                     type="submit"
-                    className="w-full flex justify-center py-2 px-4 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-tertiary hover:bg-tertiary/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tertiary"
+                    className="w-full py-1.5 sm:py-2 px-4 border border-transparent rounded-xl shadow-sm text-base sm:text-lg font-medium text-white bg-tertiary hover:bg-tertiary/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-tertiary"
                   >
                     {t("signup.createAccount")}{" "}
                     {isLoading && (
@@ -316,7 +316,7 @@ function Signup() {
                 )}
               </motion.div>
             )}
-            <p className="mt-4 text-center text-sm text-gray-600">
+            <p className="mt-2 text-center text-xs sm:text-sm text-gray-600">
               {t("signup.alreadyHaveAccount")}{" "}
               <Link
                 to="/login"
@@ -327,7 +327,7 @@ function Signup() {
             </p>
           </motion.div>
 
-          <p className="mt-4 text-center text-sm text-gray-600">
+          <p className="mt-2 text-center text-xs sm:text-sm text-gray-600">
             By signing in, you agree to our{" "}
             <a href="" className="text-tertiary hover:text-tertiary/90">
               privacy policy

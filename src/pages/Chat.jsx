@@ -82,6 +82,7 @@ function Chat() {
   const [fetchingChats, setFetchingChats] = useState(true);
   const [currentThreadId, setCurrentThreadId] = useState(null);
   const [allChats, setAllChats] = useState([]);
+  const [daysRemaining, setDaysRemaining] = useState(7); // Default to 7 days for free trial
   const [chatHistory, setChatHistory] = useState({
     today: [],
     yesterday: [],
@@ -160,6 +161,26 @@ function Chat() {
   useEffect(() => {
     fetchChats();
   }, []);
+
+  useEffect(() => {
+    // Calculate days remaining in trial if user is on Basic plan
+    if (userInfo && !userInfo.hasActiveSubscription) {
+      // If user has a createdAt date, calculate days remaining
+      if (userInfo.createdAt) {
+        const createdDate = new Date(userInfo.createdAt);
+        const currentDate = new Date();
+        const trialPeriod = 7; // 7 days trial period
+        
+        // Calculate difference in days
+        const diffTime = Math.abs(currentDate - createdDate);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        
+        // Calculate remaining days
+        const remaining = Math.max(0, trialPeriod - diffDays);
+        setDaysRemaining(remaining);
+      }
+    }
+  }, [userInfo]);
 
   // Sort chats into categories based on their createdAt date
   const sortChatsByDate = (chats) => {
@@ -878,6 +899,16 @@ function Chat() {
             </>
             {/* )} */}
           </motion.div>
+
+          {/* Trial Period Indicator */}
+          {userInfo && !userInfo.hasActiveSubscription && daysRemaining > 0 && (
+            <div className="mr-3">
+              <div className="bg-amber-100 text-amber-800 text-xs font-medium px-2.5 py-1 rounded-full flex items-center">
+                <BoltIcon className="h-3.5 w-3.5 mr-1" />
+                <span>{daysRemaining} {daysRemaining === 1 ? 'day' : 'days'} left</span>
+              </div>
+            </div>
+          )}
 
           {/* Settings Menu */}
           <div className="flex items-center">

@@ -215,23 +215,26 @@ const ChatInput = forwardRef(
               className="absolute right-4 bottom-4 px-6 py-2 rounded-3xl text-white bg-tertiary"
               disabled={!message.trim() || isLoading}
             >
-              {/* {isLoading ? "Sending..." : "Send"} */}
-              <Send
-                className={`h-7 w-7 ${
-                  isLoading || !message.trim() ? "opacity-50" : ""
-                } `}
-              />
+              {isLoading ? (
+                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+              ) : (
+                <Send
+                  className={`h-7 w-7 ${
+                    isLoading || !message.trim() ? "opacity-50" : ""
+                  } `}
+                />
+              )}
             </button>
           </form>
           {/* Disclaimer - only shown when user has exactly 1 message */}
           {messagesLength > 0 && (
             <div className="text-center text-sm text-gray-600 mt-2">
-              Case Map can make mistakes. See our{" "}
-              <a href="/privacy" className="text-tertiary hover:underline">
+              CASEMAP COACH can make mistakes. See our{" "}
+              <a href="/privacy" className="text-blue-600 hover:underline">
                 privacy policy
               </a>{" "}
               &{" "}
-              <a href="/terms" className="text-tertiary hover:underline">
+              <a href="/terms" className="text-blue-600 hover:underline">
                 terms of use
               </a>
             </div>
@@ -283,7 +286,7 @@ const ChatInput = forwardRef(
                   Important Notice
                 </h3>
               </div>
-              <p className="text-md text-gray-600 font-semibold leading-6">
+              <p className="text-md text-gray-500 font-semibold leading-6">
                 This GPT is designed for informational and educational purposes
                 only and does not constitute legal advice or create an
                 attorney-client relationship. Although it may provide insights
@@ -295,13 +298,13 @@ const ChatInput = forwardRef(
                 liability for outcomes resulting from its use. For legal advice
                 specific to your situation, consult a licensed attorney.
               </p>
-              <p className="text-md text-gray-600 font-semibold leading-6 mt-2">
+              <p className="text-md text-gray-500 font-semibold leading-6 mt-2">
                 See our{" "}
-                <a href="#" className="underline">
+                <a href="#" className="underline text-blue-600">
                   Privacy Policy
                 </a>{" "}
                 &{" "}
-                <a href="#" className="underline">
+                <a href="#" className="underline text-blue-600">
                   Terms of Use
                 </a>
               </p>
