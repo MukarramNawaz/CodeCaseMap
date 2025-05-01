@@ -28,6 +28,10 @@ async function createCheckoutSession(planId, billingCycle) {
 function PricingCard({ plan, billingCycle, isSelected, onSelect }) {
   const isPro = plan.name === "Pro";
   const [isLoading, setIsLoading] = useState(false);
+  
+  // Calculate price based on billing cycle (10% discount for yearly)
+  const displayPrice = billingCycle === "yearly" && plan.price > 0 ? 
+    Math.round(plan.price * 0.9) : plan.price;
 
   const handleSubscribe = async (e) => {
     e.stopPropagation();
@@ -53,7 +57,7 @@ function PricingCard({ plan, billingCycle, isSelected, onSelect }) {
 
   return (
     <div
-      className={`w-full sm:max-w-[360px] flex flex-col transform transition-all duration-300 ease-in-out ${
+      className={`w-full h-full flex flex-col transform transition-all duration-300 ease-in-out ${
         isSelected ? "scale-105 shadow-2xl" : "hover:scale-105 hover:shadow-xl"
       } ${
         isSelected
@@ -61,7 +65,7 @@ function PricingCard({ plan, billingCycle, isSelected, onSelect }) {
           : isPro
           ? "bg-gray-900 text-white"
           : "bg-white"
-      } p-6 sm:p-8 rounded-3xl shadow-lg border-2 ${
+      } p-4 sm:p-5 md:p-6 rounded-3xl shadow-lg border-2 ${
         isSelected
           ? "border-white"
           : isPro
@@ -75,9 +79,9 @@ function PricingCard({ plan, billingCycle, isSelected, onSelect }) {
           {plan.name} Plan
         </h3>
         <p
-          className={`text-xs sm:text-sm ${
+          className={`text-xs ${
             isSelected ? "text-gray-300" : "text-gray-500"
-          } mb-6`}
+          } mb-4`}
         >
           {plan.name === "Basic" &&
             "Individuals or small businesses just starting with HR needs."}
@@ -89,7 +93,7 @@ function PricingCard({ plan, billingCycle, isSelected, onSelect }) {
         <div className="mb-8">
           <div className="flex items-baseline">
             <span className="text-3xl sm:text-4xl font-bold">
-              ${plan.price}
+              ${displayPrice}
             </span>
             <span
               className={`ml-2 text-sm sm:text-base ${
@@ -109,30 +113,30 @@ function PricingCard({ plan, billingCycle, isSelected, onSelect }) {
             </span>
           )}
         </div>
-        <ul className="space-y-3 sm:space-y-4 mb-8">
+        <ul className="space-y-2 mb-6">
           {plan.features.map((feature, index) => (
-            <li key={index} className="flex items-start space-x-3">
+            <li key={index} className="flex items-start space-x-2">
               <div
-                className={`flex-shrink-0 w-5 h-5 rounded-full ${
+                className={`flex-shrink-0 w-4 h-4 mt-0.5 rounded-full ${
                   isSelected ? "bg-gray-800" : "bg-tertiary"
                 } flex items-center justify-center`}
               >
-                <CheckIcon className="h-3 w-3 text-white" />
+                <CheckIcon className="h-2.5 w-2.5 text-white" />
               </div>
-              <span className="text-xs sm:text-sm">{feature}</span>
+              <span className="text-xs leading-tight">{feature}</span>
             </li>
           ))}
         </ul>
       </div>
       <button
         onClick={handleSubscribe}
-        disabled={isLoading || (plan.name === "Basic" && plan.price === 0)}
+        disabled={isLoading || plan.name.includes("Free") || plan.name.includes("free") || plan.price === 0}
         className={`w-full py-2 sm:py-3 rounded-xl font-medium transition-colors duration-200 flex items-center justify-center ${
           isSelected
             ? "bg-white text-tertiary hover:bg-gray-100"
             : isPro
             ? "bg-white text-tertiary hover:bg-gray-100"
-            : plan.name === "Basic" && plan.price === 0
+            : plan.name.includes("Free") || plan.name.includes("free") || plan.price === 0
             ? "bg-gray-200 text-gray-500 cursor-not-allowed"
             : "bg-tertiary text-white hover:bg-gray-900"
         }`}
@@ -163,7 +167,7 @@ function PricingCard({ plan, billingCycle, isSelected, onSelect }) {
           </>
         ) : isPro ? (
           "Go to pro"
-        ) : plan.name === "Basic" ? (
+        ) : plan.name.includes("Free") || plan.name.includes("free") || plan.price === 0 ? (
           "Active"
         ) : (
           "Subscribe"

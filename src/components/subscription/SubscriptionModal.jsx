@@ -17,15 +17,9 @@ const mockPlans = {
   monthly: [
     {
       id: "prod_SCyIl8e2WSsQA2",
-      name: "Free 7 dat trial to Lite",
+      name: "Free 7 day trial to Lite",
       price: 0,
-      features: [
-        "5 AI queries per day",
-        "Basic document analysis",
-        "Access to case library",
-        "24/7 support",
-        "Limited export options",
-      ],
+      features: ["Free 7 day trial to Lite"],
     },
     {
       id: "prod_SCyIl8e2WSsQA1",
@@ -37,7 +31,6 @@ const mockPlans = {
         "One core case map template to plot your legal path",
         "Our 'Pro Se Readt?' checklist to avoid beginner pitfalls",
         "Community access for peer insight and support",
-        // "Custom case templates",
       ],
     },
     {
@@ -75,15 +68,9 @@ const mockPlans = {
   yearly: [
     {
       id: "prod_SCyIl8e2WSsQA2",
-      name: "Basic",
+      name: "Free 7 day trial to Lite",
       price: 0,
-      features: [
-        "5 AI queries per day",
-        "Basic document analysis",
-        "Access to case library",
-        "24/7 support",
-        "Limited export options",
-      ],
+      features: ["Free 7 day trial to Lite"],
     },
     {
       id: "prod_SCyIl8e2WSsQA1",
@@ -200,7 +187,7 @@ function SubscriptionModal({ isOpen, onClose }) {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <DialogPanel className="w-full max-w-[1200px] transform overflow-hidden rounded-3xl p-4 sm:p-6 md:p-8 transition-all">
+              <DialogPanel className="w-full max-w-[1600px] transform overflow-hidden rounded-3xl p-4 sm:p-6 md:p-8 transition-all">
                 <div className="text-center mb-4 relative">
                   <div>
                     <DialogTitle
@@ -237,9 +224,14 @@ function SubscriptionModal({ isOpen, onClose }) {
                         </p>
                       </div>
                     ) : (
-                      <p className="text-sm sm:text-base text-gray-500">
-                        {t("upgradePlan.choosePlan")}
-                      </p>
+                      <div>
+                        <p className="text-sm sm:text-base text-gray-500">
+                          {t("upgradePlan.choosePlan")}
+                        </p>
+                        <p className="text-sm sm:text-base text-gray-500">
+                          {t("upgradePlan.feelFree")}
+                        </p>
+                      </div>
                     )}
                   </div>
                 </div>
@@ -333,7 +325,7 @@ function SubscriptionModal({ isOpen, onClose }) {
                       </div>
                     </div>
 
-                    <div className="flex flex-col lg:flex-row justify-center items-center lg:items-stretch gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6 w-full">
                       {plans &&
                         plans[billingCycle].map((plan) => (
                           <PricingCard
