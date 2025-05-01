@@ -9,6 +9,7 @@ import {
 import { XMarkIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
 import PricingCard from "./PricingCard";
 import { useTranslation } from "react-i18next";
+import { redirectToCustomerPortal } from "../../lib/stripe";
 
 import { useSelector } from "react-redux";
 
@@ -380,11 +381,15 @@ function SubscriptionModal({ isOpen, onClose }) {
                         </div>
                       </div>
                       <div className="space-y-2">
-                        <button className="w-full py-2 rounded-xl font-medium bg-white border border-tertiary text-tertiary hover:bg-gray-50 transition-colors duration-200">
+                        <button 
+                          onClick={() => {
+                            if (subscriptionData?.stripe_customer_id) {
+                              redirectToCustomerPortal(subscriptionData.stripe_customer_id);
+                            }
+                          }}
+                          className="w-full py-2 rounded-xl font-medium bg-white border border-tertiary text-tertiary hover:bg-gray-50 transition-colors duration-200 flex items-center justify-center"
+                        >
                           {t("upgradePlan.manageBilling")}
-                        </button>
-                        <button className="w-full py-2 rounded-xl font-medium bg-white border border-red-500 text-red-500 hover:bg-red-50 transition-colors duration-200">
-                          {t("upgradePlan.cancelSubscription")}
                         </button>
                       </div>
                     </div>
