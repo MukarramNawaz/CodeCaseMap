@@ -44,6 +44,7 @@ import {
   Target,
   MessageSquarePlus,
   MessageSquareDot,
+  UserIcon,
 } from "lucide-react";
 import { ChatBubbleLeftIcon } from "@heroicons/react/24/solid";
 import SideBarToggle from "../assets/SideBarToggle.svg";

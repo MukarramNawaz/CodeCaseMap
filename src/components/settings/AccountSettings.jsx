@@ -5,6 +5,7 @@ import { updateUserInfo } from "../../features/userSlice";
 import { updateUserInfoApi } from "../../services/api";
 import toast from "react-hot-toast";
 import { XMarkIcon } from "@heroicons/react/24/outline";
+import { UserIcon } from "lucide-react";
 import profileBgGradient from "../../assets/profile-bg-gradient.png";
 
 export default function AccountSettings({
@@ -147,11 +148,17 @@ export default function AccountSettings({
                   {/* Profile content section */}
                   <div className="flex flex-col items-center px-4 pb-4 w-full -mt-12">
                     <div className="relative mb-2 group cursor-pointer" onClick={handleImageClick}>
-                      <img
-                        src={profileImage || "https://via.placeholder.com/150"}
-                        alt="Profile"
-                        className="w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg group-hover:opacity-90 transition-opacity"
-                      />
+                      {profileImage ? (
+                        <img
+                          src={profileImage}
+                          alt="Profile"
+                          className="w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg group-hover:opacity-90 transition-opacity"
+                        />
+                      ) : (
+                        <div className="w-24 h-24 rounded-full bg-gray-200 border-4 border-white shadow-lg flex items-center justify-center group-hover:opacity-90 transition-opacity">
+                          <UserIcon className="h-12 w-12 text-gray-400" />
+                        </div>
+                      )}
                       {/* Edit overlay indicator */}
                       <div className="absolute inset-0 flex items-center justify-center rounded-full opacity-0 group-hover:opacity-100 transition-opacity bg-black/30">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
