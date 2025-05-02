@@ -111,6 +111,7 @@
     "active": "Actif",
     "manageBilling": "Gérer la Facturation",
     "cancelSubscription": "Annuler l'Abonnement",
+    "canceledButActiveUntil": "Abonnement annulé - Actif jusqu'au",
     "subscriptionNote": "Votre abonnement vous donne accès aux fonctionnalités premium. Vous pouvez gérer votre abonnement ou l'annuler à tout moment."
   },
   "language": {

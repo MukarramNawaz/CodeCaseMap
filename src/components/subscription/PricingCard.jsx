@@ -46,14 +46,14 @@ function PricingCard({ plan, billingCycle, isSelected, onSelect }) {
     setIsLoading(false);
   };
 
-  useEffect(() => {
-    console.log("PricingCard rendered with:", {
-      planId: plan.id,
-      planName: plan.name,
-      isSelected,
-      billingCycle,
-    });
-  }, [plan, isSelected, billingCycle]);
+  // useEffect(() => {
+  //   console.log("PricingCard rendered with:", {
+  //     planId: plan.id,
+  //     planName: plan.name,
+  //     isSelected,
+  //     billingCycle,
+  //   });
+  // }, [plan, isSelected, billingCycle]);
 
   return (
     <div

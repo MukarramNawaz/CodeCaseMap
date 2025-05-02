@@ -1,5 +1,5 @@
 import { loadStripe } from "@stripe/stripe-js";
-import supabase from "../services/supabaseClient";
+import {supabase} from "../services/supabaseClient"// Adjust the import path as necessay
 let stripePromise;
 
 export const getStripe = () => {
@@ -11,6 +11,7 @@ export const getStripe = () => {
 
 // Create a Stripe Customer Portal session and redirect the user
 export const redirectToCustomerPortal = async (customerId) => {
+  console.log("Redirecting to customer portal with customerId:", customerId);
   try {
     const { data, error } = await supabase.functions.invoke(
       "create-customer-portal-session",

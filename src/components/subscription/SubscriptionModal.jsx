@@ -362,12 +362,18 @@ function SubscriptionModal({ isOpen, onClose }) {
                             Plan
                           </p>
                           <p className="text-sm text-gray-500">
-                            {subscriptionData?.current_period_end ? (
+                            {subscriptionData?.cancel_at ? (
+                              <span className="flex items-center text-amber-600">
+                                <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                {t("upgradePlan.canceledButActiveUntil")}{" "}
+                                {new Date(subscriptionData.cancel_at).toLocaleDateString()}
+                              </span>
+                            ) : subscriptionData?.current_period_end ? (
                               <span>
                                 {t("upgradePlan.nextBillingDate")}:{" "}
-                                {new Date(
-                                  subscriptionData.current_period_end
-                                ).toLocaleDateString()}
+                                {new Date(subscriptionData.current_period_end).toLocaleDateString()}
                               </span>
                             ) : (
                               <span>

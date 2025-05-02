@@ -112,6 +112,7 @@
     "active": "Active",
     "manageBilling": "Manage Billing",
     "cancelSubscription": "Cancel Subscription",
+    "canceledButActiveUntil": "Subscription canceled - Active until",
     "subscriptionNote": "Your subscription gives you access to premium features. You can manage your subscription or cancel it at any time."
   },
   "language": {
