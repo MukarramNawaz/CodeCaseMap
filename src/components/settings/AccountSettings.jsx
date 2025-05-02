@@ -147,7 +147,10 @@ export default function AccountSettings({
 
                   {/* Profile content section */}
                   <div className="flex flex-col items-center px-4 pb-4 w-full -mt-12">
-                    <div className="relative mb-2 group cursor-pointer" onClick={handleImageClick}>
+                    <div
+                      className="relative mb-2 group cursor-pointer"
+                      onClick={handleImageClick}
+                    >
                       {profileImage ? (
                         <img
                           src={profileImage}
@@ -161,8 +164,19 @@ export default function AccountSettings({
                       )}
                       {/* Edit overlay indicator */}
                       <div className="absolute inset-0 flex items-center justify-center rounded-full opacity-0 group-hover:opacity-100 transition-opacity bg-black/30">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-8 w-8 text-white"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                          />
                         </svg>
                       </div>
                       {userInfo?.hasActiveSubscription && (
@@ -292,7 +306,7 @@ export default function AccountSettings({
                     onChange={(e) => setAbout(e.target.value)}
                     rows={3}
                     className="w-full p-2 border rounded-xl focus:outline-none focus:ring-1 focus:ring-tertiary"
-                    placeholder="Lorem ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took"
+                    placeholder="Tell us about yourself"
                   />
                 </div>
               </div>

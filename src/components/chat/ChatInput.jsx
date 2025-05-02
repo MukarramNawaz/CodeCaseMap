@@ -145,14 +145,14 @@ const ChatInput = forwardRef(
           </form> */}
 
           {/* Starter Button - always visible */}
-          <div className="relative mb-4 flex items-center">
+          {/* <div className="relative mb-4 flex items-center">
             <div
               ref={starterMenuRef}
               className="relative z-30 flex items-center"
-            >
-              {/* Dropdown container with ref */}
+            > */}
+          {/* Dropdown container with ref */}
 
-              <img
+          {/* <img
                 src={SparklesImg}
                 alt="Sparkles"
                 className="h-10 w-10 mr-4"
@@ -162,19 +162,19 @@ const ChatInput = forwardRef(
                 onClick={() => setShowStarterMenu(!showStarterMenu)}
                 className="flex items-center gap-2 px-6 py-2 bg-white border border-gray-200 rounded-full shadow-md hover:shadow-lg transition-all"
               >
-                <span className="text-gray-700 font-medium">Starter</span>
-                {/* Display both icons */}
-                <div className="flex flex-col items-center">
+                <span className="text-gray-700 font-medium">Starter</span> */}
+          {/* Display both icons */}
+          {/* <div className="flex flex-col items-center">
                   <ChevronUp className="h-4 w-4 text-gray-500" />
                   <ChevronDown className="h-4 w-4 text-gray-500" />
                 </div>
-              </button>
-              {/* Starter Menu Dropdown */}
-              {showStarterMenu && (
+              </button> */}
+          {/* Starter Menu Dropdown */}
+          {/* {showStarterMenu && (
                 <div className="absolute bottom-full left-0 right-0 transform w-64 mt-2 bg-white rounded-xl shadow-lg border border-gray-200 z-100 overflow-hidden">
-                  {" "}
-                  {/* Increased width and z-index */}
-                  <div className="max-h-60 overflow-y-auto py-2">
+                  {" "} */}
+          {/* Increased width and z-index */}
+          {/* <div className="max-h-60 overflow-y-auto py-2">
                     {starterMessages.map((msg, index) => (
                       <button
                         key={index}
@@ -189,7 +189,7 @@ const ChatInput = forwardRef(
                 </div>
               )}
             </div>
-          </div>
+          </div> */}
 
           {/* Chat Input */}
           <form onSubmit={onSubmit} className="relative mb-4">
