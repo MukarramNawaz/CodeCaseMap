@@ -165,9 +165,9 @@ function Chat() {
   useEffect(() => {
     // Calculate days remaining in trial if user is on Basic plan
     if (userInfo && !userInfo.hasActiveSubscription) {
-      // If user has a createdAt date, calculate days remaining
-      if (userInfo.createdAt) {
-        const createdDate = new Date(userInfo.createdAt);
+      // If user has a created_at date, calculate days remaining
+      if (userInfo.created_at) {
+        const createdDate = new Date(userInfo.created_at);
         const currentDate = new Date();
         const trialPeriod = 7; // 7 days trial period
         
