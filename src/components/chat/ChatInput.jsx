@@ -1,5 +1,5 @@
 import { forwardRef, useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import LOGO from "../../assets/logo_single.png";
 import {
   Send,
@@ -98,6 +98,63 @@ const ChatInput = forwardRef(
         } z-20`}
       >
         <div className="w-full max-w-5xl mx-auto lg:px-0 px-4">
+          {/* Disclaimer with absolute positioning */}
+          <AnimatePresence>
+            {messagesLength == 0 && showDisclaimer && (
+              <motion.div
+                className="mt-8 p-4 rounded-lg bg-[#DEFFC9] relative hidden md:block"
+                initial={{ opacity: 1, y: 0 }}
+                exit={{
+                  opacity: 0,
+                  y: -20,
+                  position: "absolute",
+                  zIndex: -1,
+                  transition: {
+                    duration: 0.3,
+                  },
+                }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+              >
+                <button
+                  onClick={() => setShowDisclaimer(false)}
+                  className="absolute top-2 right-2 p-1 hover:bg-gray-200 rounded-full"
+                  aria-label="Close disclaimer"
+                >
+                  <X size={16} />
+                </button>
+                <div className="flex items-center gap-2 font-bold mb-2">
+                  <AlertTriangle size={20} />
+                  <h3 className="text-md font-semibold leading-6">
+                    Important Notice
+                  </h3>
+                </div>
+                <p className="text-md text-gray-500 font-semibold leading-6">
+                  This GPT is designed for informational and educational
+                  purposes only and does not constitute legal advice or create
+                  an attorney-client relationship. Although it may provide
+                  insights based on legal concepts, it is not a substitute for
+                  consultation with a qualified attorney licensed to practice in
+                  your jurisdiction. By using this GPT, you acknowledge and
+                  agree that any actions taken based on its output are your sole
+                  responsibility. The developer and owner of this GPT disclaim
+                  any liability for outcomes resulting from its use. For legal
+                  advice specific to your situation, consult a licensed
+                  attorney.
+                </p>
+                <p className="text-md text-gray-500 font-semibold leading-6 mt-2">
+                  See our{" "}
+                  <a href="#" className="underline text-blue-600">
+                    Privacy Policy
+                  </a>{" "}
+                  &{" "}
+                  <a href="#" className="underline text-blue-600">
+                    Terms of Use
+                  </a>
+                </p>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
           {messagesLength == 0 && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -145,51 +202,53 @@ const ChatInput = forwardRef(
           </form> */}
 
           {/* Starter Button - always visible */}
-          {/* <div className="relative mb-4 flex items-center">
-            <div
-              ref={starterMenuRef}
-              className="relative z-30 flex items-center"
-            > */}
-          {/* Dropdown container with ref */}
-
-          {/* <img
-                src={SparklesImg}
-                alt="Sparkles"
-                className="h-10 w-10 mr-4"
-              />
-              <button
-                type="button"
-                onClick={() => setShowStarterMenu(!showStarterMenu)}
-                className="flex items-center gap-2 px-6 py-2 bg-white border border-gray-200 rounded-full shadow-md hover:shadow-lg transition-all"
+          {messagesLength > 0 && (
+            <div className="relative mb-4 flex items-center">
+              <div
+                ref={starterMenuRef}
+                className="relative z-30 flex items-center"
               >
-                <span className="text-gray-700 font-medium">Starter</span> */}
-          {/* Display both icons */}
-          {/* <div className="flex flex-col items-center">
-                  <ChevronUp className="h-4 w-4 text-gray-500" />
-                  <ChevronDown className="h-4 w-4 text-gray-500" />
-                </div>
-              </button> */}
-          {/* Starter Menu Dropdown */}
-          {/* {showStarterMenu && (
-                <div className="absolute bottom-full left-0 right-0 transform w-64 mt-2 bg-white rounded-xl shadow-lg border border-gray-200 z-100 overflow-hidden">
-                  {" "} */}
-          {/* Increased width and z-index */}
-          {/* <div className="max-h-60 overflow-y-auto py-2">
-                    {starterMessages.map((msg, index) => (
-                      <button
-                        key={index}
-                        type="button"
-                        className="w-full text-left px-4 py-2 hover:bg-gray-50 text-sm"
-                        onClick={() => handleStarterSelect(msg)}
-                      >
-                        {msg}
-                      </button>
-                    ))}
+                {/* Dropdown container with ref */}
+
+                <img
+                  src={SparklesImg}
+                  alt="Sparkles"
+                  className="h-10 w-10 mr-4"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowStarterMenu(!showStarterMenu)}
+                  className="flex items-center gap-2 px-6 py-2 bg-white border border-gray-200 rounded-full shadow-md hover:shadow-lg transition-all"
+                >
+                  <span className="text-gray-700 font-medium">Starter</span>
+                  {/* Display both icons */}
+                  <div className="flex flex-col items-center">
+                    <ChevronUp className="h-4 w-4 text-gray-500" />
+                    <ChevronDown className="h-4 w-4 text-gray-500" />
                   </div>
-                </div>
-              )}
+                </button>
+                {/* Starter Menu Dropdown */}
+                {showStarterMenu && (
+                  <div className="absolute bottom-full left-0 right-0 transform w-64 mt-2 bg-white rounded-xl shadow-lg border border-gray-200 z-100 overflow-hidden">
+                    {" "}
+                    {/* Increased width and z-index */}
+                    <div className="max-h-60 overflow-y-auto py-2">
+                      {starterMessages.map((msg, index) => (
+                        <button
+                          key={index}
+                          type="button"
+                          className="w-full text-left px-4 py-2 hover:bg-gray-50 text-sm"
+                          onClick={() => handleStarterSelect(msg)}
+                        >
+                          {msg}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
-          </div> */}
+          )}
 
           {/* Chat Input */}
           <form onSubmit={onSubmit} className="relative mb-4">
@@ -272,46 +331,6 @@ const ChatInput = forwardRef(
                   <span className="truncate">{suggestion.label}</span>
                 </button>
               ))}
-            </div>
-          )}
-
-          {messagesLength == 0 && showDisclaimer && (
-            <div className="mt-8 p-4 rounded-lg bg-[#DEFFC9] relative hidden md:block">
-              <button
-                onClick={() => setShowDisclaimer(false)}
-                className="absolute top-2 right-2 p-1 hover:bg-gray-200 rounded-full"
-                aria-label="Close disclaimer"
-              >
-                <X size={16} />
-              </button>
-              <div className="flex items-center gap-2 font-bold mb-2">
-                <AlertTriangle size={20} />
-                <h3 className="text-md font-semibold leading-6">
-                  Important Notice
-                </h3>
-              </div>
-              <p className="text-md text-gray-500 font-semibold leading-6">
-                This GPT is designed for informational and educational purposes
-                only and does not constitute legal advice or create an
-                attorney-client relationship. Although it may provide insights
-                based on legal concepts, it is not a substitute for consultation
-                with a qualified attorney licensed to practice in your
-                jurisdiction. By using this GPT, you acknowledge and agree that
-                any actions taken based on its output are your sole
-                responsibility. The developer and owner of this GPT disclaim any
-                liability for outcomes resulting from its use. For legal advice
-                specific to your situation, consult a licensed attorney.
-              </p>
-              <p className="text-md text-gray-500 font-semibold leading-6 mt-2">
-                See our{" "}
-                <a href="#" className="underline text-blue-600">
-                  Privacy Policy
-                </a>{" "}
-                &{" "}
-                <a href="#" className="underline text-blue-600">
-                  Terms of Use
-                </a>
-              </p>
             </div>
           )}
         </div>
