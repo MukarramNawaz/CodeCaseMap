@@ -93,68 +93,9 @@ const ChatInput = forwardRef(
               : "0px",
         }}
         transition={{ duration: 0.5 }}
-        className={`fixed left-0 right-0 pb-2 transition-transform duration-300 ${
-          messagesLength > 0 ? "bottom-6" : "bottom-6"
-        } z-20`}
+        className={`fixed left-0 right-0 transition-transform duration-300 z-20 flex flex-col items-center ${messagesLength > 0 ? 'bottom-6 pb-2 justify-end' : 'top-0 bottom-0 pb-2 justify-center'}`}
       >
         <div className="w-full max-w-5xl mx-auto lg:px-0 px-4">
-          {/* Disclaimer with absolute positioning */}
-          <AnimatePresence>
-            {messagesLength == 0 && showDisclaimer && (
-              <motion.div
-                className="mt-8 p-4 rounded-lg bg-[#DEFFC9] relative hidden md:block"
-                initial={{ opacity: 1, y: 0 }}
-                exit={{
-                  opacity: 0,
-                  y: -20,
-                  position: "absolute",
-                  zIndex: -1,
-                  transition: {
-                    duration: 0.3,
-                  },
-                }}
-                transition={{ duration: 0.3, ease: "easeInOut" }}
-              >
-                <button
-                  onClick={() => setShowDisclaimer(false)}
-                  className="absolute top-2 right-2 p-1 hover:bg-gray-200 rounded-full"
-                  aria-label="Close disclaimer"
-                >
-                  <X size={16} />
-                </button>
-                <div className="flex items-center gap-2 font-bold mb-2">
-                  <AlertTriangle size={20} />
-                  <h3 className="text-md font-semibold leading-6">
-                    Important Notice
-                  </h3>
-                </div>
-                <p className="text-md text-gray-500 font-semibold leading-6">
-                  This GPT is designed for informational and educational
-                  purposes only and does not constitute legal advice or create
-                  an attorney-client relationship. Although it may provide
-                  insights based on legal concepts, it is not a substitute for
-                  consultation with a qualified attorney licensed to practice in
-                  your jurisdiction. By using this GPT, you acknowledge and
-                  agree that any actions taken based on its output are your sole
-                  responsibility. The developer and owner of this GPT disclaim
-                  any liability for outcomes resulting from its use. For legal
-                  advice specific to your situation, consult a licensed
-                  attorney.
-                </p>
-                <p className="text-md text-gray-500 font-semibold leading-6 mt-2">
-                  See our{" "}
-                  <a href="#" className="underline text-blue-600">
-                    Privacy Policy
-                  </a>{" "}
-                  &{" "}
-                  <a href="#" className="underline text-blue-600">
-                    Terms of Use
-                  </a>
-                </p>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
           {messagesLength == 0 && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -333,6 +274,59 @@ const ChatInput = forwardRef(
               ))}
             </div>
           )}
+
+          <div className="w-full relative">
+            {messagesLength == 0 && (
+              <AnimatePresence mode="popLayout">
+                {showDisclaimer && (
+                  <motion.div
+                    className="absolute left-0 right-0 top-full mt-8 p-4 rounded-lg bg-[#DEFFC9] hidden md:block"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                  >
+                    <button
+                      onClick={() => setShowDisclaimer(false)}
+                      className="absolute top-2 right-2 p-1 hover:bg-gray-200 rounded-full"
+                      aria-label="Close disclaimer"
+                    >
+                      <X size={16} />
+                    </button>
+                    <div className="flex items-center gap-2 font-bold mb-2">
+                      <AlertTriangle size={20} />
+                      <h3 className="text-md font-semibold leading-6">
+                        Important Notice
+                      </h3>
+                    </div>
+                    <p className="text-md text-gray-500 font-semibold leading-6">
+                      This GPT is designed for informational and educational
+                      purposes only and does not constitute legal advice or
+                      create an attorney-client relationship. Although it may
+                      provide insights based on legal concepts, it is not a
+                      substitute for consultation with a qualified attorney
+                      licensed to practice in your jurisdiction. By using this
+                      GPT, you acknowledge and agree that any actions taken
+                      based on its output are your sole responsibility. The
+                      developer and owner of this GPT disclaim any liability for
+                      outcomes resulting from its use. For legal advice specific
+                      to your situation, consult a licensed attorney.
+                    </p>
+                    <p className="text-md text-gray-500 font-semibold leading-6 mt-2">
+                      See our{" "}
+                      <a href="#" className="underline text-blue-600">
+                        Privacy Policy
+                      </a>{" "}
+                      &{" "}
+                      <a href="#" className="underline text-blue-600">
+                        Terms of Use
+                      </a>
+                    </p>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            )}
+          </div>
         </div>
       </motion.div>
     );
