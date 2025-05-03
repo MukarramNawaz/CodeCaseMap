@@ -93,7 +93,11 @@ const ChatInput = forwardRef(
               : "0px",
         }}
         transition={{ duration: 0.5 }}
-        className={`fixed left-0 right-0 transition-transform duration-300 z-20 flex flex-col items-center ${messagesLength > 0 ? 'bottom-6 pb-2 justify-end' : 'top-0 bottom-0 pb-2 justify-center'}`}
+        className={`fixed left-0 right-0 transition-transform duration-300 z-10 flex flex-col items-center ${
+          messagesLength > 0
+            ? "bottom-6 pb-2"
+            : "bottom-1/2 translate-y-1/2 pb-2"
+        }`}
       >
         <div className="w-full max-w-5xl mx-auto lg:px-0 px-4">
           {messagesLength == 0 && (
@@ -257,7 +261,7 @@ const ChatInput = forwardRef(
               </div>)} */}
 
           {messagesLength == 0 && (
-            <div className="flex flex-col sm:flex-row justify-center gap-2 flex-wrap">
+            <div className="flex flex-col sm:flex-row justify-center gap-2 flex-wrap mb-4">
               {suggestions.map((suggestion, index) => (
                 <button
                   key={index}
@@ -277,13 +281,13 @@ const ChatInput = forwardRef(
 
           <div className="w-full relative">
             {messagesLength == 0 && (
-              <AnimatePresence mode="popLayout">
+              <AnimatePresence>
                 {showDisclaimer && (
                   <motion.div
-                    className="absolute left-0 right-0 top-full mt-8 p-4 rounded-lg bg-[#DEFFC9] hidden md:block"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
+                    className="p-4 rounded-xl bg-[#DEFFC9] hidden md:block"
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.3, ease: "easeInOut" }}
                   >
                     <button
