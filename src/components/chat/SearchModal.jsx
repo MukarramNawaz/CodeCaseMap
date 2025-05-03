@@ -1,8 +1,31 @@
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment } from "react";
+import { Fragment, useState, useEffect } from "react";
 import { XMarkIcon, ChatBubbleLeftIcon } from "@heroicons/react/24/outline";
 
 function SearchModal({ isOpen, onClose, onSelect, allChats }) {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredChats, setFilteredChats] = useState([]);
+
+  // Update filtered chats whenever search term or allChats changes
+  useEffect(() => {
+    if (!searchTerm.trim()) {
+      setFilteredChats(allChats);
+      return;
+    }
+
+    const searchResults = allChats.filter(chat => 
+      chat.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredChats(searchResults);
+  }, [searchTerm, allChats]);
+
+  // Clear search when modal closes
+  useEffect(() => {
+    if (!isOpen) {
+      setSearchTerm("");
+    }
+  }, [isOpen]);
+
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-50" onClose={onClose}>
@@ -35,6 +58,8 @@ function SearchModal({ isOpen, onClose, onSelect, allChats }) {
                     type="text"
                     placeholder="Search chat history..."
                     className="w-full p-4 pr-12 text-lg focus:outline-none"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
                     autoFocus
                   />
                   <button
@@ -46,19 +71,25 @@ function SearchModal({ isOpen, onClose, onSelect, allChats }) {
                 </div>
 
                 <div className="max-h-96 overflow-y-auto p-4">
-                  {allChats.map((chat, index) => (
-                    <button
-                      key={index}
-                      className="flex items-center space-x-3 w-full p-3 hover:bg-gray-50 rounded-lg text-left"
-                      onClick={() => {
-                        onSelect(chat);
-                        onClose();
-                      }}
-                    >
-                      <ChatBubbleLeftIcon className="h-5 w-5 text-gray-400" />
-                      <span>{chat.name}</span>
-                    </button>
-                  ))}
+                  {filteredChats.length === 0 ? (
+                    <p className="text-center text-gray-500 py-4">
+                      No chats found
+                    </p>
+                  ) : (
+                    filteredChats.map((chat, index) => (
+                      <button
+                        key={chat.id}
+                        className="flex items-center space-x-3 w-full p-3 hover:bg-gray-50 rounded-lg text-left"
+                        onClick={() => {
+                          onSelect(chat);
+                          onClose();
+                        }}
+                      >
+                        <ChatBubbleLeftIcon className="h-5 w-5 text-gray-400" />
+                        <span>{chat.name}</span>
+                      </button>
+                    ))
+                  )}
                 </div>
               </Dialog.Panel>
             </Transition.Child>

@@ -280,8 +280,12 @@ function Chat() {
 
       // Clear current chat and create new chat if the deleted thread is open
       if (currentThreadId === id) {
-        createNewChat(); // This will clear messages, thread ID and prep for new chat
+        createNewChat();
       }
+
+      // Update both chatHistory and allChats
+      const updatedChats = allChats.filter(chat => chat.id !== id);
+      setAllChats(updatedChats);
 
       setChatHistory((prev) =>
         Object.fromEntries(
@@ -306,6 +310,12 @@ function Chat() {
         toast.error("Couldn't rename the chat, please try again.");
         return;
       }
+
+      // Update both chatHistory and allChats
+      setAllChats(prev => 
+        prev.map(chat => chat.id === id ? { ...chat, name: newName } : chat)
+      );
+
       setChatHistory((prev) =>
         Object.fromEntries(
           Object.entries(prev).map(([key, chats]) => [
@@ -362,6 +372,9 @@ function Chat() {
       if (!threadId) {
         const { response } = await createConversation(text);
         threadId = response.data.id;
+        
+        // Update both chatHistory and allChats with new conversation
+        setAllChats(prev => [response.data, ...prev]);
         setChatHistory((prev) => ({
           ...prev,
           today: [response.data, ...prev.today],
