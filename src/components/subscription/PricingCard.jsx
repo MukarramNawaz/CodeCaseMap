@@ -21,6 +21,7 @@ async function createCheckoutSession(planId, billingCycle) {
       toast.error(error.message);
     }
   } catch (err) {
+    console.error("Error creating checkout session:", err);
     toast.error("Failed to initiate checkout");
   }
 }
