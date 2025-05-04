@@ -177,7 +177,7 @@ function Chat() {
 
         // Calculate remaining days
         const remaining = Math.max(0, trialPeriod - diffDays);
-        setDaysRemaining(remaining + 1);
+        setDaysRemaining(remaining);
       }
     }
   }, [userInfo]);
@@ -766,9 +766,9 @@ function Chat() {
                 <div className="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-1 rounded-full flex items-center">
                   <BoltIcon className="h-3.5 w-3.5 mr-1" />
                   <span className="mr-1">Trial expired</span>
-                  <button 
+                  <button
                     onClick={() => setShowSubscriptionModal(true)}
-                    className="bg-red-800 text-white px-1.5 py-0.5 rounded-sm text-[10px] hover:bg-red-700 transition-colors"
+                    className="bg-tertiary text-white px-1.5 py-0.5 rounded-full text-[10px] hover:bg-tertiary/90 transition-colors"
                   >
                     Upgrade now
                   </button>
