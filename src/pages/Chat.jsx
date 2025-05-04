@@ -82,7 +82,7 @@ function Chat() {
   const [fetchingChats, setFetchingChats] = useState(true);
   const [currentThreadId, setCurrentThreadId] = useState(null);
   const [allChats, setAllChats] = useState([]);
-  const [daysRemaining, setDaysRemaining] = useState(7); // Default to 7 days for free trial
+  const [daysRemaining, setDaysRemaining] = useState(null); // Default to 7 days for free trial
   const [chatHistory, setChatHistory] = useState({
     today: [],
     yesterday: [],
@@ -170,14 +170,14 @@ function Chat() {
         const createdDate = new Date(userInfo.created_at);
         const currentDate = new Date();
         const trialPeriod = 7; // 7 days trial period
-        
+
         // Calculate difference in days
         const diffTime = Math.abs(currentDate - createdDate);
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        
+
         // Calculate remaining days
         const remaining = Math.max(0, trialPeriod - diffDays);
-        setDaysRemaining(remaining);
+        setDaysRemaining(remaining + 1);
       }
     }
   }, [userInfo]);
@@ -284,7 +284,7 @@ function Chat() {
       }
 
       // Update both chatHistory and allChats
-      const updatedChats = allChats.filter(chat => chat.id !== id);
+      const updatedChats = allChats.filter((chat) => chat.id !== id);
       setAllChats(updatedChats);
 
       setChatHistory((prev) =>
@@ -312,8 +312,8 @@ function Chat() {
       }
 
       // Update both chatHistory and allChats
-      setAllChats(prev => 
-        prev.map(chat => chat.id === id ? { ...chat, name: newName } : chat)
+      setAllChats((prev) =>
+        prev.map((chat) => (chat.id === id ? { ...chat, name: newName } : chat))
       );
 
       setChatHistory((prev) =>
@@ -335,7 +335,7 @@ function Chat() {
     setMessage("");
     setMessages([]);
     setCurrentThreadId(null);
-    
+
     // setIsSidebarOpen(false);
   };
 
@@ -357,7 +357,6 @@ function Chat() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  
   const handleSendMessage = async (e) => {
     e.preventDefault();
     const text = message.trim();
@@ -372,9 +371,9 @@ function Chat() {
       if (!threadId) {
         const { response } = await createConversation(text);
         threadId = response.data.id;
-        
+
         // Update both chatHistory and allChats with new conversation
-        setAllChats(prev => [response.data, ...prev]);
+        setAllChats((prev) => [response.data, ...prev]);
         setChatHistory((prev) => ({
           ...prev,
           today: [response.data, ...prev.today],
@@ -754,12 +753,27 @@ function Chat() {
           </motion.div>
 
           {/* Trial Period Indicator */}
-          {userInfo && !userInfo.hasActiveSubscription && daysRemaining > 0 && (
+          {userInfo && !userInfo.hasActiveSubscription && (
             <div className="mr-3">
-              <div className="bg-amber-100 text-amber-800 text-xs font-medium px-2.5 py-1 rounded-full flex items-center">
-                <BoltIcon className="h-3.5 w-3.5 mr-1" />
-                <span>{daysRemaining} {daysRemaining === 1 ? 'day' : 'days'} left</span>
-              </div>
+              {daysRemaining > 0 ? (
+                <div className="bg-amber-100 text-amber-800 text-xs font-medium px-2.5 py-1 rounded-full flex items-center">
+                  <BoltIcon className="h-3.5 w-3.5 mr-1" />
+                  <span>
+                    {daysRemaining} {daysRemaining === 1 ? "day" : "days"} left
+                  </span>
+                </div>
+              ) : (
+                <div className="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-1 rounded-full flex items-center">
+                  <BoltIcon className="h-3.5 w-3.5 mr-1" />
+                  <span className="mr-1">Trial expired</span>
+                  <button 
+                    onClick={() => setShowSubscriptionModal(true)}
+                    className="bg-red-800 text-white px-1.5 py-0.5 rounded-sm text-[10px] hover:bg-red-700 transition-colors"
+                  >
+                    Upgrade now
+                  </button>
+                </div>
+              )}
             </div>
           )}
 

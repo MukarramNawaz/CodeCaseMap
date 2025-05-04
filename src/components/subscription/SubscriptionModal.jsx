@@ -121,6 +121,7 @@ function SubscriptionModal({ isOpen, onClose }) {
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [plans, setPlans] = useState(mockPlans);
   const [isLoading, setIsLoading] = useState(false);
+  const [isBillingLoading, setIsBillingLoading] = useState(false);
 
   // Get user data from Redux store
   const { userInfo } = useSelector((state) => state.user);
@@ -237,174 +238,214 @@ function SubscriptionModal({ isOpen, onClose }) {
                   </div>
                 </div>
 
-                {!hasActiveSubscription ? (
-                  <>
-                    <div className="flex flex-col items-center mb-8">
-                      <div className="flex items-center bg-gray-100 p-1 rounded-lg mb-3 w-fit">
-                        <button
-                          className={`px-4 sm:px-6 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center justify-center ${
-                            billingCycle === "monthly"
-                              ? "bg-tertiary text-white"
-                              : "text-gray-600 hover:bg-gray-50"
-                          }`}
-                          onClick={() => {
-                            if (billingCycle !== "monthly") {
-                              setIsLoading(true);
-                              setTimeout(() => {
-                                setBillingCycle("monthly");
-                                setIsLoading(false);
-                              }, 500);
-                            }
-                          }}
-                          disabled={isLoading}
-                        >
-                          {isLoading && billingCycle !== "monthly" ? (
-                            <svg
-                              className="animate-spin h-4 w-4 mr-2"
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                            >
-                              <circle
-                                className="opacity-25"
-                                cx="12"
-                                cy="12"
-                                r="10"
-                                stroke="currentColor"
-                                strokeWidth="4"
-                              ></circle>
-                              <path
-                                className="opacity-75"
-                                fill="currentColor"
-                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                              ></path>
-                            </svg>
-                          ) : null}
-                          {t("upgradePlan.monthly")}
-                        </button>
-                        <button
-                          className={`px-4 sm:px-6 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center justify-center ${
-                            billingCycle === "yearly"
-                              ? "bg-tertiary text-white"
-                              : "text-gray-600 hover:bg-gray-50"
-                          }`}
-                          onClick={() => {
-                            if (billingCycle !== "yearly") {
-                              setIsLoading(true);
-                              setTimeout(() => {
-                                setBillingCycle("yearly");
-                                setIsLoading(false);
-                              }, 500);
-                            }
-                          }}
-                          disabled={isLoading}
-                        >
-                          {isLoading && billingCycle !== "yearly" ? (
-                            <svg
-                              className="animate-spin h-4 w-4 mr-2"
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                            >
-                              <circle
-                                className="opacity-25"
-                                cx="12"
-                                cy="12"
-                                r="10"
-                                stroke="currentColor"
-                                strokeWidth="4"
-                              ></circle>
-                              <path
-                                className="opacity-75"
-                                fill="currentColor"
-                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                              ></path>
-                            </svg>
-                          ) : null}
-                          {t("upgradePlan.yearly")}
-                        </button>
-                      </div>
-                      {billingCycle === "yearly" && (
-                        <div>
-                          <span className="bg-amber-100 text-amber-800 text-xs font-medium px-2.5 py-1 rounded-full inline-flex items-center">
-                            <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                              <path fillRule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a1 1 0 011-1h5.586a1 1 0 01.707.293l1 1a1 1 0 001.414 0l1-1A1 1 0 0113.414 4H19a1 1 0 011 1v5c0 .256-.098.512-.293.707z" clipRule="evenodd" />
-                            </svg>
-                            Save 10% with yearly billing
+                <>
+                  {/* Current plan indicator and small manage button */}
+                  {hasActiveSubscription && (
+                    <div className="flex justify-center items-center mb-4">
+                      <div className="flex items-center bg-tertiary/10 px-3 py-1.5 rounded-lg">
+                        <span className="text-sm font-medium text-tertiary mr-2">
+                          {t("upgradePlan.currentPlan")}:
+                          <span className="font-bold ml-1">
+                            {subscriptionData?.planDetails?.name || "Premium"}
                           </span>
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6 w-full mt-6">
-                      {plans &&
-                        plans[billingCycle].map((plan) => (
-                          <PricingCard
-                            key={plan.name}
-                            plan={plan}
-                            billingCycle={billingCycle}
-                            isSelected={selectedPlan === plan.name}
-                            onSelect={() => setSelectedPlan(plan.name)}
-                          />
-                        ))}
-                    </div>
-                  </>
-                ) : (
-                  <div className="flex flex-col items-center justify-center py-8">
-                    <div className="bg-gray-50 rounded-xl p-6 max-w-md w-full mb-6">
-                      <h3 className="text-lg font-medium mb-2">
-                        {t("upgradePlan.currentPlan")}
-                      </h3>
-                      <div className="flex justify-between items-center mb-4">
-                        <div>
-                          <p className="text-xl font-bold text-tertiary">
-                            {subscriptionData?.planDetails?.name || "Premium"}{" "}
-                            Plan
-                          </p>
-                          <p className="text-sm text-gray-500">
-                            {subscriptionData?.cancel_at ? (
-                              <span className="flex items-center text-amber-600">
-                                <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                                {t("upgradePlan.canceledButActiveUntil")}{" "}
-                                {new Date(subscriptionData.cancel_at).toLocaleDateString()}
-                              </span>
-                            ) : subscriptionData?.current_period_end ? (
-                              <span>
-                                {t("upgradePlan.nextBillingDate")}:{" "}
-                                {new Date(subscriptionData.current_period_end).toLocaleDateString()}
-                              </span>
-                            ) : (
-                              <span>
-                                {t("upgradePlan.activeUntilCanceled")}
-                              </span>
-                            )}
-                          </p>
-                        </div>
-                        <div className="bg-tertiary text-white text-xs font-medium px-3 py-1 rounded-full">
-                          {t("upgradePlan.active")}
-                        </div>
-                      </div>
-                      <div className="space-y-2">
-                        <button 
+                        </span>
+                        <div className="h-4 w-px bg-tertiary/30 mx-2"></div>
+                        <button
                           onClick={() => {
-                            if (subscriptionData?.stripe_customer_id) {
-                              redirectToCustomerPortal(subscriptionData.stripe_customer_id);
+                            if (
+                              subscriptionData?.stripe_customer_id &&
+                              !isBillingLoading
+                            ) {
+                              setIsBillingLoading(true);
+                              try {
+                                redirectToCustomerPortal(
+                                  subscriptionData.stripe_customer_id
+                                ).catch((error) => {
+                                  console.error(
+                                    "Error redirecting to customer portal:",
+                                    error
+                                  );
+                                  toast.error("Failed to open billing portal");
+                                  setIsBillingLoading(false);
+                                });
+
+                                // Set a timeout to reset the loading state in case the redirect doesn't happen
+                                // This is a fallback since the page will navigate away on success
+                                setTimeout(
+                                  () => setIsBillingLoading(false),
+                                  5000
+                                );
+                              } catch (error) {
+                                console.error(
+                                  "Error in customer portal redirect:",
+                                  error
+                                );
+                                setIsBillingLoading(false);
+                              }
                             }
                           }}
-                          className="w-full py-2 rounded-xl font-medium bg-white border border-tertiary text-tertiary hover:bg-gray-50 transition-colors duration-200 flex items-center justify-center"
+                          disabled={isBillingLoading}
+                          className={`text-xs font-medium px-2 py-1 rounded transition-colors duration-200 flex items-center justify-center min-w-[90px] ${
+                            isBillingLoading
+                              ? "bg-tertiary/80"
+                              : "bg-tertiary hover:bg-tertiary/90"
+                          } text-white`}
                         >
-                          {t("upgradePlan.manageBilling")}
+                          {isBillingLoading ? (
+                            <>
+                              <svg
+                                className="animate-spin h-3 w-3 mr-1"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                              >
+                                <circle
+                                  className="opacity-25"
+                                  cx="12"
+                                  cy="12"
+                                  r="10"
+                                  stroke="currentColor"
+                                  strokeWidth="4"
+                                ></circle>
+                                <path
+                                  className="opacity-75"
+                                  fill="currentColor"
+                                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                ></path>
+                              </svg>
+                              <span>Loading...</span>
+                            </>
+                          ) : (
+                            t("upgradePlan.manageBilling")
+                          )}
                         </button>
                       </div>
                     </div>
+                  )}
 
-                    <p className="text-sm text-gray-500 max-w-md text-center">
-                      {t("upgradePlan.subscriptionNote")}
-                    </p>
+                  <div className="flex flex-col items-center mb-8">
+                    <div className="flex items-center bg-gray-100 p-1 rounded-lg mb-3 w-fit">
+                      <button
+                        className={`px-4 sm:px-6 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center justify-center ${
+                          billingCycle === "monthly"
+                            ? "bg-tertiary text-white"
+                            : "text-gray-600 hover:bg-gray-50"
+                        }`}
+                        onClick={() => {
+                          if (billingCycle !== "monthly") {
+                            setIsLoading(true);
+                            setTimeout(() => {
+                              setBillingCycle("monthly");
+                              setIsLoading(false);
+                            }, 500);
+                          }
+                        }}
+                        disabled={isLoading}
+                      >
+                        {isLoading && billingCycle !== "monthly" ? (
+                          <svg
+                            className="animate-spin h-4 w-4 mr-2"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <circle
+                              className="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              strokeWidth="4"
+                            ></circle>
+                            <path
+                              className="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            ></path>
+                          </svg>
+                        ) : null}
+                        {t("upgradePlan.monthly")}
+                      </button>
+                      <button
+                        className={`px-4 sm:px-6 py-2 rounded-lg text-sm font-medium transition-colors duration-200 flex items-center justify-center ${
+                          billingCycle === "yearly"
+                            ? "bg-tertiary text-white"
+                            : "text-gray-600 hover:bg-gray-50"
+                        }`}
+                        onClick={() => {
+                          if (billingCycle !== "yearly") {
+                            setIsLoading(true);
+                            setTimeout(() => {
+                              setBillingCycle("yearly");
+                              setIsLoading(false);
+                            }, 500);
+                          }
+                        }}
+                        disabled={isLoading}
+                      >
+                        {isLoading && billingCycle !== "yearly" ? (
+                          <svg
+                            className="animate-spin h-4 w-4 mr-2"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <circle
+                              className="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              strokeWidth="4"
+                            ></circle>
+                            <path
+                              className="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            ></path>
+                          </svg>
+                        ) : null}
+                        {t("upgradePlan.yearly")}
+                      </button>
+                    </div>
+                    {billingCycle === "yearly" && (
+                      <div>
+                        <span className="bg-amber-100 text-amber-800 text-xs font-medium px-2.5 py-1 rounded-full inline-flex items-center">
+                          <svg
+                            className="w-3 h-3 mr-1"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a1 1 0 011-1h5.586a1 1 0 01.707.293l1 1a1 1 0 001.414 0l1-1A1 1 0 0113.414 4H19a1 1 0 011 1v5c0 .256-.098.512-.293.707z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                          Save 10% with yearly billing
+                        </span>
+                      </div>
+                    )}
                   </div>
-                )}
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6 w-full mt-6">
+                    {plans &&
+                      plans[billingCycle].map((plan) => (
+                        <PricingCard
+                          key={plan.name}
+                          plan={plan}
+                          billingCycle={billingCycle}
+                          isSelected={selectedPlan === plan.name}
+                          onSelect={() => setSelectedPlan(plan.name)}
+                          isCurrentPlan={
+                            hasActiveSubscription &&
+                            subscriptionData?.planDetails?.name === plan.name
+                          }
+                        />
+                      ))}
+                  </div>
+                </>
               </DialogPanel>
             </TransitionChild>
           </div>

@@ -26,7 +26,7 @@ async function createCheckoutSession(planId, billingCycle) {
   }
 }
 
-function PricingCard({ plan, billingCycle, isSelected, onSelect }) {
+function PricingCard({ plan, billingCycle, isSelected, onSelect, isCurrentPlan = false }) {
   const isPro = plan.name === "Pro";
   const [isLoading, setIsLoading] = useState(false);
   
@@ -131,9 +131,11 @@ function PricingCard({ plan, billingCycle, isSelected, onSelect }) {
       </div>
       <button
         onClick={handleSubscribe}
-        disabled={isLoading || plan.name.includes("Free") || plan.name.includes("free") || plan.price === 0}
+        disabled={isLoading || plan.name.includes("Free") || plan.name.includes("free") || plan.price === 0 || isCurrentPlan}
         className={`w-full py-2 sm:py-3 rounded-xl font-medium transition-colors duration-200 flex items-center justify-center ${
-          isSelected
+          isCurrentPlan
+            ? "bg-tertiary/20 text-tertiary border border-tertiary cursor-default"
+            : isSelected
             ? "bg-white text-tertiary hover:bg-gray-100"
             : isPro
             ? "bg-white text-tertiary hover:bg-gray-100"
@@ -166,6 +168,8 @@ function PricingCard({ plan, billingCycle, isSelected, onSelect }) {
             </svg>
             Processing...
           </>
+        ) : isCurrentPlan ? (
+          "Current Plan"
         ) : isPro ? (
           "Go to pro"
         ) : plan.name.includes("Free") || plan.name.includes("free") || plan.price === 0 ? (
