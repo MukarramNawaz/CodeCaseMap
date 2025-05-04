@@ -440,7 +440,7 @@ function SubscriptionModal({ isOpen, onClose }) {
                           onSelect={() => setSelectedPlan(plan.name)}
                           isCurrentPlan={
                             hasActiveSubscription &&
-                            subscriptionData?.planDetails?.name === plan.name
+                            (subscriptionData?.plan_id === plan.id || subscriptionData?.planDetails?.id === plan.id)
                           }
                         />
                       ))}

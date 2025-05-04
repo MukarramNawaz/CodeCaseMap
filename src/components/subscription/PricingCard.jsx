@@ -61,13 +61,17 @@ function PricingCard({ plan, billingCycle, isSelected, onSelect, isCurrentPlan =
       className={`w-full h-full flex flex-col transform transition-all duration-300 ease-in-out ${
         isSelected ? "scale-105 shadow-2xl" : "hover:scale-105 hover:shadow-xl"
       } ${
-        isSelected
+        isCurrentPlan
+          ? "bg-tertiary/5 text-gray-800 border-tertiary"
+          : isSelected
           ? "bg-tertiary text-white"
           : isPro
           ? "bg-gray-900 text-white"
           : "bg-white"
       } p-4 sm:p-5 md:p-6 rounded-3xl shadow-lg border-2 ${
-        isSelected
+        isCurrentPlan
+          ? "border-tertiary"
+          : isSelected
           ? "border-white"
           : isPro
           ? "border-gray-800"
@@ -76,9 +80,16 @@ function PricingCard({ plan, billingCycle, isSelected, onSelect, isCurrentPlan =
       onClick={onSelect}
     >
       <div className="flex-grow">
-        <h3 className="text-xl sm:text-2xl font-semibold mb-2">
-          {plan.name} Plan
-        </h3>
+        <div className="flex justify-between items-start">
+          <h3 className="text-xl sm:text-2xl font-semibold mb-2">
+            {plan.name} Plan
+          </h3>
+          {isCurrentPlan && (
+            <span className="bg-tertiary text-white text-xs font-medium px-2 py-0.5 rounded-full">
+              Current Plan
+            </span>
+          )}
+        </div>
         <p
           className={`text-xs ${
             isSelected ? "text-gray-300" : "text-gray-500"
