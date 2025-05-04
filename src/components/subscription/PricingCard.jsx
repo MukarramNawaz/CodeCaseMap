@@ -104,7 +104,7 @@ function PricingCard({ plan, billingCycle, isSelected, onSelect }) {
                   : "text-gray-500"
               }`}
             >
-              /{billingCycle}
+              /month
             </span>
           </div>
           {isPro && billingCycle === "yearly" && (
