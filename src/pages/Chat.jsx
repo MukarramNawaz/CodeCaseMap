@@ -756,11 +756,22 @@ function Chat() {
           {userInfo && !userInfo.hasActiveSubscription && (
             <div className="mr-3">
               {daysRemaining > 0 ? (
-                <div className="bg-amber-100 text-amber-800 text-xs font-medium px-2.5 py-1 rounded-full flex items-center">
-                  <BoltIcon className="h-3.5 w-3.5 mr-1" />
-                  <span>
-                    {daysRemaining} {daysRemaining === 1 ? "day" : "days"} left
-                  </span>
+                <div className="group relative">
+                  <div className="bg-amber-100 text-amber-800 text-xs font-medium px-2.5 py-1 rounded-full flex items-center cursor-help">
+                    <BoltIcon className="h-3.5 w-3.5 mr-1" />
+                    <span>
+                      {daysRemaining} {daysRemaining === 1 ? "day" : "days"}{" "}
+                      left
+                    </span>
+                  </div>
+                  {/* Tooltip */}
+                  <div className="absolute invisible group-hover:visible bg-gray-900/90 backdrop-blur-sm text-white text-xs rounded-lg py-2 px-3 -bottom-10 left-1/2 transform -translate-x-1/2 w-max z-50 shadow-lg">
+                    <div className="flex items-center whitespace-nowrap font-medium">
+                      Your free trial ends
+                    </div>
+                    {/* Arrow */}
+                    <div className="absolute -top-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-gray-900/90 rotate-45"></div>
+                  </div>
                 </div>
               ) : (
                 <div className="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-1 rounded-full flex items-center">
