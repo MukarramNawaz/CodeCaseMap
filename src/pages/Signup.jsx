@@ -141,7 +141,10 @@ function Signup() {
               <h2 className="text-xl sm:text-2xl md:text-3xl text-tertiary font-bold mb-2 sm:mb-4 text-center">
                 {t("signup.createAccount")}
               </h2>
-              <form onSubmit={handleSubmit} className="space-y-1.5 sm:space-y-2 md:space-y-3">
+              <form
+                onSubmit={handleSubmit}
+                className="space-y-1.5 sm:space-y-2 md:space-y-3"
+              >
                 <button
                   type="button"
                   onClick={handleGoogleSignUp}
@@ -329,11 +332,19 @@ function Signup() {
 
           <p className="mt-2 text-center text-xs sm:text-sm text-gray-600">
             By signing in, you agree to our{" "}
-            <a href="" className="text-tertiary hover:text-tertiary/90">
+            <a
+              href="https://www.termsfeed.com/live/6e88d89f-3441-4d91-93a7-f6ceb37fa093"
+              target="_blank"
+              className="text-tertiary hover:text-tertiary/90"
+            >
               privacy policy
             </a>{" "}
             and{" "}
-            <a href="" className="text-tertiary hover:text-tertiary/90">
+            <a
+              href="https://www.termsfeed.com/live/085eb4f2-77db-4cd8-ba1c-af1e8b9ea444"
+              target="_blank"
+              className="text-tertiary hover:text-tertiary/90"
+            >
               terms of service
             </a>
           </p>

@@ -172,7 +172,10 @@ function Login() {
                     </label>
                   </div>
 
-                  <Link to="/forgot-password" className="text-sm font-medium text-tertiary hover:underline">
+                  <Link
+                    to="/forgot-password"
+                    className="text-sm font-medium text-tertiary hover:underline"
+                  >
                     {t("login.forgotPassword")}
                   </Link>
                 </div>
@@ -202,11 +205,19 @@ function Login() {
 
             <p className="mt-2 text-center text-xs sm:text-sm text-gray-600">
               By signing in, you agree to our{" "}
-              <a href="" className="text-tertiary hover:text-tertiary/90">
+              <a
+                href="https://www.termsfeed.com/live/6e88d89f-3441-4d91-93a7-f6ceb37fa093"
+                target="_blank"
+                className="text-tertiary hover:text-tertiary/90"
+              >
                 privacy policy
               </a>{" "}
               and{" "}
-              <a href="" className="text-tertiary hover:text-tertiary/90">
+              <a
+                href="https://www.termsfeed.com/live/085eb4f2-77db-4cd8-ba1c-af1e8b9ea444"
+                target="_blank"
+                className="text-tertiary hover:text-tertiary/90"
+              >
                 terms of service
               </a>
             </p>

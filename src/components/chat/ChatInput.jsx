@@ -238,11 +238,19 @@ const ChatInput = forwardRef(
           {messagesLength > 0 && (
             <div className="text-center text-sm text-gray-600 mt-2">
               CASEMAP COACH can make mistakes. See our{" "}
-              <a href="/privacy" className="text-blue-600 hover:underline">
+              <a
+                href="https://www.termsfeed.com/live/6e88d89f-3441-4d91-93a7-f6ceb37fa093"
+                target="_blank"
+                className="text-blue-600 hover:underline"
+              >
                 privacy policy
               </a>{" "}
               &{" "}
-              <a href="/terms" className="text-blue-600 hover:underline">
+              <a
+                href="https://www.termsfeed.com/live/085eb4f2-77db-4cd8-ba1c-af1e8b9ea444"
+                target="_blank"
+                className="text-blue-600 hover:underline"
+              >
                 terms of use
               </a>
             </div>
@@ -318,11 +326,19 @@ const ChatInput = forwardRef(
                     </p>
                     <p className="text-md text-gray-500 font-semibold leading-6 mt-2">
                       See our{" "}
-                      <a href="#" className="underline text-blue-600">
+                      <a
+                        href="https://www.termsfeed.com/live/6e88d89f-3441-4d91-93a7-f6ceb37fa093"
+                        target="_blank"
+                        className="underline text-blue-600"
+                      >
                         Privacy Policy
                       </a>{" "}
                       &{" "}
-                      <a href="#" className="underline text-blue-600">
+                      <a
+                        href="https://www.termsfeed.com/live/085eb4f2-77db-4cd8-ba1c-af1e8b9ea444"
+                        target="_blank"
+                        className="underline text-blue-600"
+                      >
                         Terms of Use
                       </a>
                     </p>
