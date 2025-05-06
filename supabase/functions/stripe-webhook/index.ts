@@ -33,17 +33,28 @@ Deno.serve(async (req)=>{
         {
           const subscription = event.data.object;
           const metadata = subscription.metadata;
-          const cancelAt = subscription.cancel_at ? new Date(subscription.cancel_at * 1000) : null;
-          if (cancelAt !== null) {
-            // Update all records with matching subscription ID where cancel_at is not null
-            await supabase.from("subscriptions").update({
-              cancel_at: new Date(subscription.cancel_at * 1000)
-            }).eq("stripe_subscription_id", subscription.id);
-          } else {
-            // Upsert the subscription data
+          const userId = metadata.user_id;
+          // If this isn’t just a cancellation update, we need to replace whatever's live
+          if (!subscription.cancel_at) {
+            // 1) Look up any existing subscriptions for this user
+            const { data: existingSubs, error: fetchError } = await supabase.from("subscriptions").select("stripe_subscription_id").eq("user_id", userId);
+            if (fetchError) {
+              console.error("Could not fetch existing subs:", fetchError);
+              throw fetchError;
+            }
+            // 2) Cancel each one at Stripe first
+            try {
+              await stripe.subscriptions.cancel(existingSubs[1].stripe_subscription_id);
+            } catch (stripeErr) {
+              console.error(`Failed to cancel Stripe subscription ${existingSubs[1].stripe_subscription_id}:`, stripeErr);
+            // decide whether to continue or fail hard
+            }
+            // 3) Delete them locally
+            await supabase.from("subscriptions").delete().eq("user_id", userId);
+            // 4) upsert the new subscription
             await supabase.from("subscriptions").upsert({
               stripe_subscription_id: subscription.id,
-              user_id: metadata.user_id,
+              user_id: userId,
               plan_id: metadata.plan_id,
               stripe_customer_id: subscription.customer,
               status: subscription.status,
@@ -51,6 +62,18 @@ Deno.serve(async (req)=>{
               cancel_at: null,
               updated_at: new Date()
             });
+            // 5) If active, update the user’s assistant_id
+            if (subscription.status === "active") {
+              await supabase.from("users").update({
+                assistant_id: metadata.assistant_id
+              }).eq("id", userId);
+            }
+          } else {
+            // It’s a cancellation event — just mark it locally
+            const cancelAt = new Date(subscription.cancel_at * 1000);
+            await supabase.from("subscriptions").update({
+              cancel_at: cancelAt
+            }).eq("stripe_subscription_id", subscription.id);
           }
           break;
         }

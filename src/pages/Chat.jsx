@@ -499,11 +499,11 @@ function Chat() {
       label: `${t("chat.upgradePlan")}`,
       onClick: () => setShowSubscriptionModal(true),
     },
-    {
-      icon: QuestionMarkCircleIcon,
-      label: `${t("chat.help")}`,
-      onClick: () => toast.success("Help section coming soon!"),
-    },
+    // {
+    //   icon: QuestionMarkCircleIcon,
+    //   label: `${t("chat.help")}`,
+    //   onClick: () => toast.success("Help section coming soon!"),
+    // },
     {
       icon: ArrowRightOnRectangleIcon,
       label: `${t("chat.logout")}`,

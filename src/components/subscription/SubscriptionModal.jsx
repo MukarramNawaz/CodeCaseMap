@@ -128,27 +128,13 @@ function SubscriptionModal({ isOpen, onClose }) {
   const hasActiveSubscription = userInfo?.hasActiveSubscription || false;
   const subscriptionData = userInfo?.subscription || null;
 
-  // useEffect(() => {
-  //   const fetchPlans = async () => {
-  //     try {
-  //       if (useMockData) {
-  //         setPlans(mockPlans);
-  //         setSelectedPlan(mockPlans.monthly[0].name);
-  //         return;
-  //       }
-
-  //       const data = await getPlans();
-  //       setPlans(data);
-  //       setSelectedPlan(data.monthly[0].name);
-  //     } catch (error) {
-  //       console.error("Failed to fetch plans, using mock data:", error);
-  //       // Fallback to mock data if API fails
-  //       setPlans(mockPlans);
-  //       setSelectedPlan(mockPlans.monthly[0].name);
-  //     }
-  //   };
-  //   fetchPlans();
-  // }, [useMockData]);
+  // Filter plans based on subscription status
+  const filteredPlans = (currentPlans) => {
+    if (hasActiveSubscription) {
+      return currentPlans.filter(plan => plan.id !== "prod_SCyIl8e2WSsQA2");
+    }
+    return currentPlans;
+  };
 
   useEffect(() => {
     if (plans && plans[billingCycle]) {
@@ -429,9 +415,9 @@ function SubscriptionModal({ isOpen, onClose }) {
                     )}
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6 w-full mt-6">
+                  <div className={`grid grid-cols-1 md:grid-cols-2 ${hasActiveSubscription ? 'xl:grid-cols-3' : 'xl:grid-cols-4'} gap-4 sm:gap-6 w-full mt-6`}>
                     {plans &&
-                      plans[billingCycle].map((plan) => (
+                      filteredPlans(plans[billingCycle]).map((plan) => (
                         <PricingCard
                           key={plan.name}
                           plan={plan}
