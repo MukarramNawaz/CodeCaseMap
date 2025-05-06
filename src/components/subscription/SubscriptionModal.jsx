@@ -35,7 +35,7 @@ const mockPlans = {
       ],
     },
     {
-      id: "prod_SCyIl8e2WSsQA3",
+      id: "prod_SGJAthPONCQeYx",
       name: "Tactical Builder",
       price: 77,
       features: [
@@ -50,7 +50,7 @@ const mockPlans = {
       ],
     },
     {
-      id: "prod_SCyIl8e2WSsQA4",
+      id: "prod_SGJANAfifEP3Ja",
       name: "Litigant Elite",
       price: 147,
       features: [
@@ -86,7 +86,7 @@ const mockPlans = {
       ],
     },
     {
-      id: "prod_SCyIl8e2WSsQA3",
+      id: "prod_SGJAthPONCQeYx",
       name: "Tactical Builder",
       price: 77,
       features: [
@@ -99,7 +99,7 @@ const mockPlans = {
       ],
     },
     {
-      id: "prod_SCyIl8e2WSsQA4",
+      id: "prod_SGJANAfifEP3Ja",
       name: "Litigant Elite",
       price: 147,
       features: [
