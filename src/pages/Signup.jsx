@@ -24,6 +24,7 @@ function Signup() {
   const [isLoading, setIsLoading] = useState(false);
   const [askOTP, setAskOTP] = useState(false);
   const [otpValues, setOtpValues] = useState(["", "", "", ""]);
+  const [emailConfirmationSent, setEmailConfirmationSent] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -35,8 +36,9 @@ function Signup() {
         formData.fullName
       );
       if (response.success) {
-        toast.success("Account created successfully!");
-        navigate("/chat");
+        // Always show email confirmation screen since we're enforcing email verification
+        setEmailConfirmationSent(true);
+        toast.success("Please check your email to confirm your account!");
       } else {
         toast.error(response.message);
       }
@@ -138,12 +140,39 @@ function Signup() {
               className="h-16 sm:h-20 md:h-24 mx-auto mb-2 sm:mb-4"
             />
             <div className="bg-white p-4 sm:p-5 md:p-6 rounded-lg shadow-lg">
-              <h2 className="text-xl sm:text-2xl md:text-3xl text-tertiary font-bold mb-2 sm:mb-4 text-center">
-                {t("signup.createAccount")}
-              </h2>
-              <form
-                onSubmit={handleSubmit}
-                className="space-y-1.5 sm:space-y-2 md:space-y-3"
+              {emailConfirmationSent ? (
+                <div className="text-center py-8">
+                  <h2 className="text-xl sm:text-2xl md:text-3xl text-tertiary font-bold mb-4">
+                    {t("Check Your Email")}
+                  </h2>
+                  <p className="text-gray-600 mb-6">
+                    We've sent a confirmation link to <span className="font-semibold">{formData.email}</span>.
+                    Please check your inbox and click the link to activate your account.
+                  </p>
+                  <p className="text-sm text-gray-500 mb-4">
+                    If you don't see the email, check your spam folder or
+                    <button 
+                      onClick={handleSubmit} 
+                      className="text-tertiary hover:underline ml-1"
+                    >
+                      click here to resend
+                    </button>
+                  </p>
+                  <Link
+                    to="/login"
+                    className="inline-block mt-4 text-white bg-tertiary hover:bg-tertiary/80 py-2 px-6 rounded-xl"
+                  >
+                    {t("Back to Login")}
+                  </Link>
+                </div>
+              ) : (
+                <>
+                  <h2 className="text-xl sm:text-2xl md:text-3xl text-tertiary font-bold mb-2 sm:mb-4 text-center">
+                    {t("signup.createAccount")}
+                  </h2>
+                  <form
+                    onSubmit={handleSubmit}
+                    className="space-y-1.5 sm:space-y-2 md:space-y-3"
               >
                 <button
                   type="button"
@@ -271,6 +300,8 @@ function Signup() {
                   </button>
                 )}
               </form>
+                </>
+              )}
             </div>
             {askOTP && (
               <motion.div
@@ -329,9 +360,9 @@ function Signup() {
               </Link>
             </p>
           </motion.div>
-
-          <p className="mt-2 text-center text-xs sm:text-sm text-gray-600">
-            By signing in, you agree to our{" "}
+          {emailConfirmationSent ? null : (
+            <p className="mt-2 text-center text-xs sm:text-sm text-gray-600">
+              By signing in, you agree to our{" "}
             <a
               href="https://www.termsfeed.com/live/6e88d89f-3441-4d91-93a7-f6ceb37fa093"
               target="_blank"
@@ -348,6 +379,7 @@ function Signup() {
               terms of service
             </a>
           </p>
+          )}
         </div>
       </div>
     </div>

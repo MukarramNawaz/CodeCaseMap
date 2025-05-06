@@ -12,12 +12,20 @@ export const registerUser = async (email, password, name) => {
       options: {
         data: {
           name
-        }
+        },
+        emailRedirectTo: `${window.location.origin}/auth/confirm`
       }
     });
 
     if (error) throw error;
-    return { success: true, data };
+    
+    // Always require email confirmation
+    // The user will need to verify their email before they can log in
+    return { 
+      success: true, 
+      data,
+      requiresEmailConfirmation: true
+    };
   } catch (error) {
     return { success: false, message: error.message };
   }
@@ -31,7 +39,38 @@ export const loginUser = async (email, password) => {
       password
     });
 
-    if (error) throw error;
+    if (error) {
+      // Special handling for unverified emails
+      if (error.message.includes('Email not confirmed')) {
+        return { 
+          success: false, 
+          message: "Please verify your email before logging in. Check your inbox for a confirmation link.",
+          emailNotConfirmed: true,
+          userEmail: email
+        };
+      }
+      throw error;
+    }
+    
+    // Check if the user's email has been confirmed
+    if (!data.user.email_confirmed_at) {
+      // Send another confirmation email
+      await supabase.auth.resend({
+        type: 'signup',
+        email: email,
+        options: {
+          emailRedirectTo: `${window.location.origin}/auth/confirm`
+        }
+      });
+      
+      return { 
+        success: false, 
+        message: "Please verify your email before logging in. A new confirmation link has been sent to your email.",
+        emailNotConfirmed: true,
+        userEmail: email
+      };
+    }
+    
     return { success: true, data };
   } catch (error) {
     return { success: false, message: error.message };
