@@ -7,6 +7,7 @@ import LogoTransparent from "../assets/CaseMap logo.png";
 import LoginBG from "../assets/LoginBG.jpg";
 import { useTranslation } from "react-i18next";
 import { loginUser, signInWithGoogle } from "../services/api";
+import { supabase } from "../supabase/supabaseClient";
 
 function Login() {
   const { i18n, t } = useTranslation();
@@ -110,18 +111,21 @@ function Login() {
                   <p className="text-sm text-gray-500 mb-4">
                     If you don't see the email, check your spam folder or
                     <button 
-                      onClick={() => {
+                      onClick={async () => {
                         setIsLoading(true);
-                        loginUser(unverifiedEmail, password)
-                          .then(() => {
-                            toast.success("Verification email resent!");
-                          })
-                          .catch(() => {
-                            toast.error("Error resending verification email");
-                          })
-                          .finally(() => {
-                            setIsLoading(false);
+                        try {
+                          const { data, error } = await supabase.auth.resend({
+                            type: 'signup',
+                            email: unverifiedEmail
                           });
+                          if (error) throw error;
+                          toast.success("Verification email resent!");
+                        } catch (error) {
+                          toast.error("Error resending verification email");
+                          console.error(error);
+                        } finally {
+                          setIsLoading(false);
+                        }
                       }} 
                       className="text-tertiary hover:underline ml-1"
                     >
@@ -129,7 +133,12 @@ function Login() {
                     </button>
                   </p>
                   <button
-                    onClick={() => setEmailNotConfirmed(false)}
+                    onClick={() => {
+                      setEmailNotConfirmed(false);
+                      setUnverifiedEmail("");
+                      setEmail("");
+                      setPassword("");
+                    }}
                     className="inline-block mt-4 text-white bg-tertiary hover:bg-tertiary/80 py-2 px-6 rounded-xl"
                   >
                     Back to Login
